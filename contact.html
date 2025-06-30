@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, minimum-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Contact Kelsa Events for all your event planning and rental needs. Get in touch with our team to plan your perfect event.">
+    <title>Contact Us - Kelsa Events</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mobile.css" media="(max-width: 768px)">
+    <link rel="stylesheet" href="css/form-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a237e">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header>
+        <div class="container">
+            <div class="header-wrapper">
+                <div class="logo-container">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">K</div>
+                        Kelsa Events
+                    </a>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span class="hamburger"></span>
+                </button>
+                <nav class="main-nav">
+                    <a href="index.html">Home</a>
+                    <a href="rentals.html">Rentals</a>
+                    <a href="event.html">Event Services</a>
+                    <a href="contact.html" class="active">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div class="menu-overlay"></div>
+
+    <section class="hero">
+        <div class="hero-background">
+            <img src="assets/images/contact-hero.webp" alt="Contact Us" loading="eager" fetchpriority="high"
+                 onerror="this.onerror=null; this.src='https://source.unsplash.com/random/1600x900/?customer,service';">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team to plan your perfect event</p>
+            <div class="hero-buttons">
+                <a href="#contactForm" class="btn">Send Message</a>
+                <a href="tel:+2348025071778" class="btn btn-outline">Call Now</a>
+            </div>
+        </div>
+    </section>
+    
+    <main id="main-content">
+        <div class="container">
+            <section class="section">
+                <div class="section-title">Get In Touch</div>
+                <div class="section-subtitle">We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.</div>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Contact Information</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="fas fa-map-marker-alt" style="color: var(--accent); margin-right: 10px;"></i> Shop 28, BEAUFORT COURT ESTATE, LUGBE, ABUJA</li>
+                            <li><i class="fas fa-phone" style="color: var(--accent); margin-right: 10px;"></i> +234 802 5071 1778</li>
+                            <li><i class="fas fa-envelope" style="color: var(--accent); margin-right: 10px;"></i> info@kelsaevents.com</li>
+                            <li><i class="fas fa-clock" style="color: var(--accent); margin-right: 10px;"></i> Monday-Friday: 9am-5pm</li>
+                        </ul>
+                        
+                        <h3 class="mt-4">Follow Us</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Send Us a Message</h3>
+                        <form class="contact-form" id="contactForm">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" id="name" name="name" class="form-control" required 
+                                       data-error-required="Please enter your name" minlength="2">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" id="email" name="email" class="form-control" required
+                                       data-error-required="Please enter your email address"
+                                       data-error-email="Please enter a valid email address">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" required
+                                       data-error-required="Please enter your phone number"
+                                       data-error-phone="Please enter a valid phone number"
+                                       placeholder="+234 802 5071 1778">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventType" class="form-label">Event Type</label>
+                                <select id="eventType" name="eventType" class="form-control" required
+                                        data-error-required="Please select an event type">
+                                    <option value="">Select an event type</option>
+                                    <option value="wedding">Wedding</option>
+                                    <option value="corporate">Corporate Event</option>
+                                    <option value="birthday">Birthday Party</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message" class="form-label">Your Message</label>
+                                <textarea id="message" name="message" class="form-control" required
+                                          data-error-required="Please enter your message" minlength="10"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <div class="section-title">Our Location</div>
+                <div class="map-container" style="height: 400px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);">
+                    <div class="map-placeholder" style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary) 0%, #2a3990 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;">
+                        <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                        <h3>Shop 28, BEAUFORT COURT ESTATE</h3>
+                        <p>LUGBE, ABUJA</p>
+                        <a href="https://goo.gl/maps/YourActualGoogleMapsLink" class="btn" style="margin-top: 1rem;" target="_blank" rel="noopener">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </a>
+                    </div>
+                </div>
+                <div class="address-details" style="margin-top: 1.5rem; text-align: center;">
+                    <p>We're located in the heart of LUGBE, ABUJA. Visit us today to discuss your event needs in person!</p>
+                    <p>
+                        <a href="tel:+2348025071778" class="btn" style="margin-right: 1rem;">
+                            <i class="fas fa-phone"></i> Call Us
+                        </a>
+                        <a href="mailto:info@kelsaevents.com" class="btn">
+                            <i class="fas fa-envelope"></i> Email Us
+                        </a>
+                    </p>
+                </div>
+            </section>
+            
+            <section class="section">
+                <div class="section-title">Frequently Asked Questions</div>
+                
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>How far in advance should I book your services?</h3>
+                    <p>We recommend booking our services at least 3-6 months in advance for large events like weddings, and 1-2 months for smaller events. However, we do accommodate last-minute bookings when possible.</p>
+                </div>
+                
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>Do you provide delivery and setup services?</h3>
+                    <p>Yes, we offer delivery, setup, and pickup services for all our rental items. Additional fees may apply based on location and complexity.</p>
+                </div>
+                
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>What is your cancellation policy?</h3>
+                    <p>Cancellations made 30+ days before the event receive a full refund minus a 10% administrative fee. Cancellations within 30 days are subject to our detailed policy, which will be provided in your contract.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Kelsa Events</h3>
+                    <p>Your premier partner for event planning and rental services since 2020.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="rentals.html">Rentals</a></li>
+                        <li><a href="event.html">Event Services</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Shop 28, BEAUFORT COURT ESTATE, LUGBE, ABUJA</li>
+                        <li><i class="fas fa-phone"></i> +234 802 5071 1778</li>
+                        <li><i class="fas fa-envelope"></i> info@kelsaevents.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; <span id="currentYear">2025</span> Kelsa Events. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/image-optimizer.js"></script>
+    <script src="js/form-validator.js"></script>
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Add animation to cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.transitionDelay = (index * 0.1) + 's';
+            
+            setTimeout(() => {
+                card.style.opacity = 1;
+                card.style.transform = 'translateY(0)';
+            }, 300);
+        });
+        
+        // Use embedded map instead of JavaScript API
+        const mapContainer = document.querySelector('.map-container');
+        if (mapContainer) {
+            // Create an embedded Google Maps iframe
+            const mapIframe = document.createElement('iframe');
+            mapIframe.style.width = '100%';
+            mapIframe.style.height = '100%';
+            mapIframe.style.border = 'none';
+            mapIframe.style.borderRadius = 'var(--radius)';
+            
+            // Set the map source - using OpenStreetMap as it doesn't require an API key
+            mapIframe.src = 'https://www.openstreetmap.org/export/embed.html?bbox=7.3786%2C9.0665%2C7.4186%2C9.0865&amp;layer=mapnik&amp;marker=9.0765%2C7.3986';
+            
+            // Clear the container and add the iframe
+            mapContainer.innerHTML = '';
+            mapContainer.appendChild(mapIframe);
+            
+            // Add attribution link below the map
+            const attribution = document.createElement('div');
+            attribution.style.fontSize = '0.8rem';
+            attribution.style.textAlign = 'right';
+            attribution.style.marginTop = '5px';
+            attribution.innerHTML = '<a href="https://www.openstreetmap.org/?mlat=9.0765&amp;mlon=7.3986#map=15/9.0765/7.3986" target="_blank" rel="noopener">View larger map</a>';
+            
+            // Add the attribution after the map container
+            mapContainer.parentNode.insertBefore(attribution, mapContainer.nextSibling);
+        }
+        
+        // Update the "Get Directions" link to use Google Maps directions
+        const directionsLink = document.querySelector('.map-container a[target="_blank"]');
+        if (directionsLink) {
+            directionsLink.href = 'https://www.google.com/maps/dir/?api=1&destination=Shop+28+BEAUFORT+COURT+ESTATE+LUGBE+ABUJA&destination_place_id=ChIJwUKKi5VXXhARFGnEGOgB-3s';
+        }
+    </script>
+</body>
+</html>
