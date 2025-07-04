@@ -54,15 +54,14 @@
 
     <section class="hero">
         <div class="hero-background">
-            <img src="assets/images/kelsaevent1.webp" alt="Hero Image" loading="eager" fetchpriority="high"
+            <img src="assets/images/kelsaevent1.webp" alt="Hero Image" loading="eager" fetchpriority="high" 
                  srcset="assets/images/kelsaevent1.webp 1200w, assets/images/kelsaevent1.webp 800w" 
-                 sizes="100vw">
+                 sizes="(max-width: 768px) 100vw, 1200px">
+            <div class="hero-overlay"></div>
         </div>
-        <div class="hero-overlay"></div>
         <div class="hero-content">
-            <span class="hero-tagline">Premier Event Planning</span>
             <h1>Creating Unforgettable Events</h1>
-            <p>Your trusted partner for exceptional event planning and premium rental services in Abuja</p>
+            <p>Your premier partner for event planning and rental services</p>
             <div class="hero-buttons">
                 <a href="event.html" class="btn" aria-label="Learn about our event services">Event Services</a>
                 <a href="rentals.html" class="btn btn-outline" aria-label="Explore our rental options">Rental Options</a>
@@ -75,7 +74,7 @@
             <section class="intro animate">
                 <div class="section-title">
                     <h2>Welcome to Kelsa Events</h2>
-                    <p>Making your special occasions truly memorable </p>
+                    <p>Making your special occasions truly memorable</p>
                 </div>
                 <div class="intro-content">
                     <p>At Kelsa Events, we specialize in comprehensive event planning and equipment rentals to make your special occasions memorable. From weddings to corporate events, we handle all the details so you can enjoy your special day.</p>
@@ -139,7 +138,7 @@
                 </div>
             </section>
 
-            <section class="cta animate" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)); padding: 5rem 0; margin: 3rem 0; text-align: center; color: white; border-radius: 10px;">
+            <section class="cta animate" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)); padding: 6rem 0; margin: 3rem 0; text-align: center; color: white; border-radius: 10px;">
                 <h2>Ready to Plan Your Next Event?</h2>
                 <p>Contact us today to discuss how we can make your vision a reality.</p>
                 <a href="contact.html" class="btn">Get in Touch</a>
@@ -196,26 +195,6 @@
         </div>
     </footer>
 
-    <!-- Mobile Footer Navigation -->
-    <div class="mobile-footer-nav">
-        <a href="index.html" class="active">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="event.html">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Events</span>
-        </a>
-        <a href="rentals.html">
-            <i class="fas fa-chair"></i>
-            <span>Rentals</span>
-        </a>
-        <a href="contact.html">
-            <i class="fas fa-envelope"></i>
-            <span>Contact</span>
-        </a>
-    </div>
-
     <script src="js/main.js"></script>
     <script src="js/image-optimizer.js"></script>
     <script>
@@ -232,76 +211,39 @@
             });
         }
         
-        // Add animation on scroll with performance optimizations
+        // Add animation on scroll
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if user prefers reduced motion
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const animateElements = document.querySelectorAll('.animate');
             
-            if (!prefersReducedMotion) {
-                const animateElements = document.querySelectorAll('.animate');
-                
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.opacity = 1;
-                            entry.target.style.transform = 'translateY(0)';
-                            // Stop observing after animation
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, {
-                    threshold: 0.1,
-                    rootMargin: '0px 0px -50px 0px'
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
                 });
-                
-                animateElements.forEach(element => {
-                    // Add will-change for performance
-                    element.style.willChange = 'opacity, transform';
-                    element.style.opacity = 0;
-                    element.style.transform = 'translateY(20px)';
-                    element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    observer.observe(element);
-                });
-            } else {
-                // For users who prefer reduced motion
-                document.querySelectorAll('.animate').forEach(element => {
-                    element.style.opacity = 1;
-                    element.style.transform = 'none';
-                });
-            }
+            });
+            
+            animateElements.forEach(element => {
+                element.style.opacity = 0;
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(element);
+            });
             
             // Set current year in footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
-            // Optimize image loading
-            const images = document.querySelectorAll('img:not([loading])');
+            // Handle image loading
+            const images = document.querySelectorAll('.img-real');
             images.forEach(img => {
-                // Don't lazy load above-the-fold images
-                if (!img.closest('.hero')) {
-                    img.loading = 'lazy';
-                }
-                
-                // Add fade-in effect
-                img.style.opacity = '0';
-                img.style.transition = 'opacity 0.5s ease';
-                
+                img.classList.add('loading');
                 img.addEventListener('load', function() {
-                    this.style.opacity = '1';
+                    this.classList.remove('loading');
                 });
-            });
-            
-            // Hide mobile footer nav when keyboard is open
-            const originalHeight = window.innerHeight;
-            window.addEventListener('resize', () => {
-                const mobileFooter = document.querySelector('.mobile-footer-nav');
-                if (mobileFooter) {
-                    if (window.innerHeight < originalHeight * 0.8) {
-                        // Keyboard is likely open
-                        mobileFooter.style.display = 'none';
-                    } else {
-                        mobileFooter.style.display = 'flex';
-                    }
-                }
+                
+                // Add lazy loading
+                img.loading = 'lazy';
             });
         });
     </script>

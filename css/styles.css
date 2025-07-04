@@ -137,8 +137,7 @@ header {
   background: linear-gradient(90deg, var(--primary) 70%, var(--accent) 100%);
   color: #fff;
   box-shadow: var(--shadow);
-  border-bottom-left-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
+
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -506,6 +505,26 @@ header {
   background: linear-gradient(90deg, var(--primary), var(--accent));
   border-radius: 2px;
 }
+.features .section-title h2::after {
+  content: '';
+  display: block;
+  margin: 0 auto;
+  margin-top: 0.3em;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+}
+.features .section-title h2 {
+  display: inline-block;
+  border-bottom: none;
+  padding-bottom: 0.3em;
+  position: relative;
+}
+
+.features .section-title::after {
+  display: none;
+}
 
 .section-subtitle {
   text-align: center;
@@ -656,7 +675,7 @@ header {
   text-align: center;
   padding: var(--spacing-lg);
   background: var(--card-bg);
-  border-radius: var(--radius);
+
   box-shadow: var(--shadow);
   transition: all var(--transition);
   position: relative;
