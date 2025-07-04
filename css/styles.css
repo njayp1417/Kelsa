@@ -916,6 +916,22 @@ footer {
 }
 
 .social-links {
+  margin-top: 0.5rem; /* Optional: reduce if there's extra space above the icons */
+  display: flex;
+  gap: 0.8rem; /* Controls space between icons */
+}
+
+.social-links a {
+  font-size: 1.5rem;
+  color: var(--primary);
+  transition: color 0.2s;
+}
+
+.social-links a:hover {
+  color: var(--accent);
+}
+
+.social-links {
   display: flex;
   gap: var(--spacing-md);
   margin-top: var(--spacing-md);
@@ -931,11 +947,19 @@ footer {
   color: #fff;
   border-radius: 50%;
   transition: all var(--transition);
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-right: 1rem;
+  transition: color 0.2s;
+  vertical-align: middle;
+}
+
+.social-links a:last-child {
+  margin-right: 0;
 }
 
 .social-links a:hover {
-  background: var(--accent);
-  transform: translateY(-3px);
+  color: var(--accent);
 }
 
 .copyright {
@@ -1059,7 +1083,7 @@ footer {
 .mt-1 { margin-top: var(--spacing-sm); }
 .mt-2 { margin-top: var(--spacing-md); }
 .mt-3 { margin-top: var(--spacing-lg); }
-.mt-4 { margin-top: var(--spacing-xl); }
+.mt-4 { margin-top: 1rem !important; } /* Reduce from 2rem or more to 1rem */
 .mb-1 { margin-bottom: var(--spacing-sm); }
 .mb-2 { margin-bottom: var(--spacing-md); }
 .mb-3 { margin-bottom: var(--spacing-lg); }
@@ -1250,4 +1274,12 @@ body {
   .page-transition-overlay {
     background-color: #000;
   }
+}
+
+/* Stylish font for contact information list */
+.card h3 + ul {
+  font-family: 'Poppins', 'Segoe Script', 'Brush Script MT', cursive, sans-serif;
+  font-size: 1.08rem;
+  letter-spacing: 0.02em;
+  color: #2a3990;
 }
