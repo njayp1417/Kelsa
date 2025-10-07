@@ -14,7 +14,15 @@ input, textarea, [contenteditable] {
 }
 
 /* Base Mobile Optimizations */
+/* Hide mobile nav on desktop */
+.mobile-footer-nav {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  .mobile-footer-nav {
+    display: flex;
+  }
   /* Viewport and Performance */
   html {
     -webkit-text-size-adjust: 100%;
