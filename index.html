@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, minimum-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Kelsa Events offers premier event planning and rental services. Create unforgettable experiences with our professional team.">
-    <title>Kelsa Events - Premier Event Planning & Rentals</title>
+    <meta name="description" content="Professional event planning and equipment rental services in Abuja, Nigeria. Kelsa Events specializes in weddings, corporate events, and party rentals with premium quality equipment and personalized service.">
+    <meta name="keywords" content="event planning Abuja, equipment rental Nigeria, wedding planning Abuja, party rentals Nigeria, corporate events Abuja, venue decoration, chiavari chairs rental, table rental Abuja">
+    <meta name="author" content="Kelsa Events">
+    <meta name="robots" content="index, follow">
+    <meta name="geo.region" content="NG-FC">
+    <meta name="geo.placename" content="Abuja">
+    <meta name="geo.position" content="9.0579;7.4951">
+    <meta name="ICBM" content="9.0579, 7.4951">
+    <link rel="canonical" href="https://njayp1417.github.io/Kelsa/">
+    <title>Kelsa Events - Premier Event Planning & Equipment Rental Services in Abuja, Nigeria</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/mobile.css" media="(max-width: 768px)">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -22,9 +30,66 @@
     <meta name="apple-touch-fullscreen" content="yes">
     <link rel="apple-touch-icon" href="assets/favicon.ico">
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:title" content="Kelsa Events - Premier Event Planning & Rentals">
-    <meta property="og:description" content="Kelsa Events offers premier event planning and rental services. Create unforgettable experiences with our professional team.">
+    <meta property="og:title" content="Kelsa Events - Premier Event Planning & Equipment Rental Services in Abuja, Nigeria">
+    <meta property="og:description" content="Professional event planning and equipment rental services in Abuja, Nigeria. Specializing in weddings, corporate events, and party rentals with premium quality equipment.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://njayp1417.github.io/Kelsa/">
+    <meta property="og:image" content="https://njayp1417.github.io/Kelsa/assets/images/kelsaevent1.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_NG">
+    <meta property="og:site_name" content="Kelsa Events">
+    <meta name="twitter:title" content="Kelsa Events - Premier Event Planning & Equipment Rental Services in Abuja, Nigeria">
+    <meta name="twitter:description" content="Professional event planning and equipment rental services in Abuja, Nigeria. Specializing in weddings, corporate events, and party rentals.">
+    <meta name="twitter:image" content="https://njayp1417.github.io/Kelsa/assets/images/kelsaevent1.webp">
+    <meta name="twitter:site" content="@KelsaEvents">
+    <!-- Structured Data for Local Business -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Kelsa Events",
+      "alternateName": "Kelsa Rental",
+      "description": "Professional event planning and equipment rental services in Abuja, Nigeria",
+      "url": "https://njayp1417.github.io/Kelsa/",
+      "telephone": "+234-913-463-6775",
+      "email": "kelsarentalsevent@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Shop B2 Beaufort Court Estate Lugbe",
+        "addressLocality": "Abuja",
+        "addressRegion": "FCT",
+        "addressCountry": "Nigeria"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "9.0579",
+        "longitude": "7.4951"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Abuja"
+      },
+      "serviceType": ["Event Planning", "Equipment Rental", "Wedding Planning", "Corporate Events", "Party Rentals"],
+      "priceRange": "₦₦",
+      "openingHours": "Mo-Sa 09:00-17:00",
+      "foundingDate": "2025",
+      "sameAs": [
+        "https://facebook.com/KelsaEvents",
+        "https://instagram.com/kelsarentals",
+        "https://twitter.com/kelsaevents"
+      ]
+    }
+    </script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5H6Q75N2P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T5H6Q75N2P');
+    </script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -38,10 +103,12 @@
                         Kelsa Events
                     </a>
                 </div>
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                    <span class="hamburger"></span>
+                <button class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
-                <nav class="main-nav">
+                <nav class="main-nav" id="nav">
                     <a href="index.html" class="active">Home</a>
                     <a href="rentals.html">Rentals</a>
                     <a href="event.html">Event Services</a>
@@ -50,20 +117,21 @@
             </div>
         </div>
     </header>
-    <div class="menu-overlay"></div>
+
 
     <section class="hero">
         <div class="hero-background">
-            <img src="assets/images/kelsaevent1.webp" alt="Hero Image" loading="eager" fetchpriority="high" 
+            <img src="assets/images/kelsaevent1.webp" alt="Kelsa Events professional event planning and equipment rental services in Abuja - elegant wedding setup with premium chairs and decorations" loading="eager" fetchpriority="high" 
                  srcset="assets/images/kelsaevent1.webp 1200w, assets/images/kelsaevent1.webp 800w" 
                  sizes="(max-width: 768px) 100vw, 1200px">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
-            <h1>Creating Unforgettable Events</h1>
-            <p>Your premier partner for event planning and rental services</p>
+            <h1>Creating Unforgettable Events </h1>
+            <p>Your premier partner for professional event planning and equipment rental services in Nigeria</p>
             <div class="hero-buttons">
                 <a href="event.html" class="btn" aria-label="Learn about our event services">Event Services</a>
+                <a href="contact.html" class="btn btn-secondary" aria-label="Get a quote for your event">Get a Quote</a>
                 <a href="rentals.html" class="btn btn-outline" aria-label="Explore our rental options">Rental Options</a>
             </div>
         </div>
@@ -77,7 +145,7 @@
                     <p>Making your special occasions truly memorable</p>
                 </div>
                 <div class="intro-content">
-                    <p>At Kelsa Events, we specialize in comprehensive event planning and equipment rentals to make your special occasions memorable. From weddings to corporate events, we handle all the details so you can enjoy your special day.</p>
+                    <p>At Kelsa Events, we specialize in comprehensive event planning and premium equipment rentals in Abuja, Nigeria. From elegant weddings to corporate events, we provide professional services including chiavari chairs, banquet tables, venue decoration, and complete event management to make your special occasions truly memorable.</p>
                 </div>
             </section>
 
@@ -165,9 +233,9 @@
                     <h3>Kelsa Events</h3>
                     <p>Your premier partner for event planning and rental services since 2020.</p>
                     <div class="social-links mt-2">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="https://facebook.com/KelsaEvents"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/kelsarentals"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/kelsaevents"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
@@ -185,6 +253,7 @@
                     <ul>
                         <li><i class="fas fa-map-marker-alt"></i> Shop 2B, BEAUFORT COURT ESTATE, LUGBE, ABUJA</li>
                         <li><i class="fas fa-phone"></i> +234 913 463 6775</li>
+                        <li><i class="fas fa-phone"></i> +234 802 507 1778</li>
                         <li><i class="fas fa-envelope"></i> info@kelsaevents.com</li>
                     </ul>
                 </div>
@@ -245,6 +314,78 @@
                 // Add lazy loading
                 img.loading = 'lazy';
             });
+        });
+    </script>
+
+    <!-- Mobile Footer Navigation -->
+    <nav class="mobile-footer-nav">
+        <a href="index.html" class="active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="rentals.html">
+            <i class="fas fa-chair"></i>
+            <span>Rentals</span>
+        </a>
+        <a href="event.html">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Events</span>
+        </a>
+        <a href="contact.html">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </nav>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions">
+        <a href="https://wa.me/2349134636775" class="whatsapp-btn" aria-label="Contact us on WhatsApp" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="tel:+2349134636775" class="phone-btn" aria-label="Call us now">
+            <i class="fas fa-phone"></i>
+        </a>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const scrollToTopBtn = document.querySelector('.scroll-to-top');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    document.body.classList.toggle('mobile-menu-open');
+                });
+            }
+            
+            // Close mobile menu when overlay is clicked
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', function() {
+                    document.body.classList.remove('mobile-menu-open');
+                });
+            }
+            
+            // Scroll to top functionality
+            if (scrollToTopBtn) {
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        scrollToTopBtn.classList.add('visible');
+                    } else {
+                        scrollToTopBtn.classList.remove('visible');
+                    }
+                });
+                
+                scrollToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
         });
     </script>
 </body>

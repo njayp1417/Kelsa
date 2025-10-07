@@ -15,6 +15,15 @@
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a237e">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5H6Q75N2P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T5H6Q75N2P');
+    </script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -28,10 +37,12 @@
                         Kelsa Events
                     </a>
                 </div>
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                    <span class="hamburger"></span>
+                <button class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
-                <nav class="main-nav">
+                <nav class="main-nav" id="nav">
                     <a href="index.html">Home</a>
                     <a href="rentals.html" class="active">Rentals</a>
                     <a href="event.html">Event Services</a>
@@ -40,7 +51,7 @@
             </div>
         </div>
     </header>
-    <div class="menu-overlay"></div>
+
 
     <section class="hero" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://source.unsplash.com/random/1600x900/?event,rental') no-repeat center center/cover;">
         <div class="hero-text">
@@ -62,156 +73,34 @@
             <section id="rental-categories" class="cards-container">
                 <div class="card animate">
                     <div class="card-img">
-                        <img src="https://source.unsplash.com/random/600x400/?sound,equipment" alt="Equipment Rentals">
+                        <img src="https://source.unsplash.com/random/600x400/?chairs,furniture" alt="Furniture Rentals">
                     </div>
                     <div class="card-content">
-                        <h3>Equipment Rentals</h3>
-                        <p>Professional sound systems, lighting equipment, stages, and more for any event size.</p>
-                        <a href="#equipment-rentals" class="btn">View Details</a>
+                        <h3>Furniture Rentals</h3>
+                        <p>Luxury Chiavari chairs, VIP seating, banquet tables, and elegant furniture for your event.</p>
+                        <a href="#furniture-rentals" class="btn">View Details</a>
                     </div>
                 </div>
 
                 <div class="card animate">
                     <div class="card-img">
-                        <img src="https://source.unsplash.com/random/600x400/?venue,event" alt="Venue Rentals">
+                        <img src="https://source.unsplash.com/random/600x400/?decor,canopy" alt="Venue & Decor">
                     </div>
                     <div class="card-content">
-                        <h3>Venue Rentals</h3>
-                        <p>Beautiful venues for weddings, corporate events, and private celebrations.</p>
-                        <a href="#venue-rentals" class="btn">View Details</a>
-                    </div>
-                </div>
-
-                <div class="card animate">
-                    <div class="card-img">
-                        <img src="https://source.unsplash.com/random/600x400/?decor,event" alt="Decor Rentals">
-                    </div>
-                    <div class="card-content">
-                        <h3>Decor Rentals</h3>
-                        <p>Stunning decorations to transform your event space into something magical.</p>
+                        <h3>Venue & Decor</h3>
+                        <p>Arabian canopies, linens, centerpieces, and decorative elements to transform your space.</p>
                         <a href="#decor-rentals" class="btn">View Details</a>
                     </div>
                 </div>
 
                 <div class="card animate">
                     <div class="card-img">
-                        <img src="https://source.unsplash.com/random/600x400/?furniture,event" alt="Furniture Rentals">
+                        <img src="https://source.unsplash.com/random/600x400/?plates,tableware" alt="Tableware & Catering">
                     </div>
                     <div class="card-content">
-                        <h3>Furniture Rentals</h3>
-                        <p>Stylish and comfortable furniture options for any event setting.</p>
-                        <a href="#furniture-rentals" class="btn">View Details</a>
-                    </div>
-                </div>
-            </section>
-
-            <section id="equipment-rentals" class="mt-2 mb-2">
-                <div class="section-title">
-                    <h2>Equipment Rentals</h2>
-                </div>
-                <p style="padding-bottom: 2rem;">We offer a wide range of professional equipment for rent including sound systems, lighting, projectors, and more. Our equipment is regularly maintained and tested to ensure flawless performance at your event.</p>
-                
-                <div class="cards-container">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?sound,system" alt="Sound Systems">
-                        </div>
-                        <div class="card-content">
-                            <h3>Sound Systems</h3>
-                            <p>Professional audio equipment for events of any size.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?lighting,event" alt="Lighting Equipment">
-                        </div>
-                        <div class="card-content">
-                            <h3>Lighting Equipment</h3>
-                            <p>Create the perfect ambiance with our lighting options.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?projector,screen" alt="Projectors & Screens">
-                        </div>
-                        <div class="card-content">
-                            <h3>Projectors & Screens</h3>
-                            <p>High-definition visual equipment for presentations and entertainment.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="venue-rentals" class="mt-2 mb-2">
-                <div class="section-title">
-                    <h2>Venue Rentals</h2>
-                </div>
-                <p style="padding-bottom: 2rem;">Choose from our selection of beautiful venues for your next event. We offer indoor and outdoor spaces that can be customized to match your vision.</p>
-                
-                <div class="cards-container">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?ballroom,elegant" alt="Ballrooms">
-                        </div>
-                        <div class="card-content">
-                            <h3>Ballrooms</h3>
-                            <p>Elegant spaces for weddings and formal events.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?conference,business" alt="Conference Centers">
-                        </div>
-                        <div class="card-content">
-                            <h3>Conference Centers</h3>
-                            <p>Professional environments for business meetings and seminars.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?garden,event" alt="Outdoor Gardens">
-                        </div>
-                        <div class="card-content">
-                            <h3>Outdoor Gardens</h3>
-                            <p>Beautiful natural settings for memorable celebrations.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="decor-rentals" class="mt-2 mb-2">
-                <div class="section-title">
-                    <h2>Decor Rentals</h2>
-                </div>
-                <p style="padding-bottom: 2rem;">Enhance your event with our stunning decor options available for rent. From elegant centerpieces to themed decorations, we have everything you need.</p>
-                
-                <div class="cards-container">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?centerpiece,table" alt="Centerpieces">
-                        </div>
-                        <div class="card-content">
-                            <h3>Centerpieces</h3>
-                            <p>Eye-catching table decorations for any theme.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?backdrop,event" alt="Backdrops">
-                        </div>
-                        <div class="card-content">
-                            <h3>Backdrops</h3>
-                            <p>Beautiful settings for photo opportunities and focal points.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?lights,decoration" alt="Lighting Decor">
-                        </div>
-                        <div class="card-content">
-                            <h3>Lighting Decor</h3>
-                            <p>String lights, lanterns, and more to create magical atmospheres.</p>
-                        </div>
+                        <h3>Tableware & Catering Equipment</h3>
+                        <p>Fine china, glassware, cutlery, and traditional serving pieces for elegant dining.</p>
+                        <a href="#tableware-rentals" class="btn">View Details</a>
                     </div>
                 </div>
             </section>
@@ -220,38 +109,150 @@
                 <div class="section-title">
                     <h2>Furniture Rentals</h2>
                 </div>
-                <p style="padding-bottom: 2rem;">We provide a variety of furniture options to suit your event's needs, from elegant seating to practical tables and more.</p>
+                <p style="padding-bottom: 2rem;">Elegant and comfortable seating and table options to create the perfect atmosphere for your event.</p>
                 
                 <div class="cards-container">
                     <div class="card">
                         <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?chairs,event" alt="Chairs">
+                            <img src="https://source.unsplash.com/random/600x400/?chiavari,chairs" alt="Luxury Chairs">
                         </div>
                         <div class="card-content">
-                            <h3>Chairs</h3>
-                            <p>Elegant and comfortable chairs for all occasions.</p>
+                            <h3>Luxury Chiavari & VIP Chairs</h3>
+                            <p>Premium seating options for elegant events and special occasions.</p>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?tables,event" alt="Tables">
+                            <img src="https://source.unsplash.com/random/600x400/?banquet,tables" alt="Banquet Tables">
                         </div>
                         <div class="card-content">
-                            <h3>Tables</h3>
-                            <p>Various table sizes and shapes to suit your event needs.</p>
+                            <h3>Round & Rectangular Banquet Tables</h3>
+                            <p>Various table sizes and shapes to accommodate your guest count.</p>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-img">
-                            <img src="https://source.unsplash.com/random/600x400/?tent,canopy" alt="Canopies & Tents">
+                            <img src="https://source.unsplash.com/random/600x400/?outdoor,furniture" alt="Outdoor Furniture">
                         </div>
                         <div class="card-content">
-                            <h3>Canopies & Tents</h3>
-                            <p>Weather-proof canopies and tents for outdoor events.</p>
+                            <h3>Lush Carpet Grass & Plastic Chairs and Tables</h3>
+                            <p>Complete outdoor setup with carpet grass and plastic furniture.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?pillows,lounge" alt="Decorative Furniture">
+                        </div>
+                        <div class="card-content">
+                            <h3>Decorative Throw Pillows & Low Tables</h3>
+                            <p>Comfortable lounge seating and accent pieces for relaxed settings.</p>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <section id="decor-rentals" class="mt-2 mb-2">
+                <div class="section-title">
+                    <h2>Venue & Decor Rentals</h2>
+                </div>
+                <p style="padding-bottom: 2rem;">Transform your event space with our elegant decorative elements and venue enhancements.</p>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?canopy,tent" alt="Arabian Canopies">
+                        </div>
+                        <div class="card-content">
+                            <h3>Elegant Arabian Canopies</h3>
+                            <p>Stunning overhead coverage for outdoor and indoor events.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?linens,napkins" alt="Linens & Covers">
+                        </div>
+                        <div class="card-content">
+                            <h3>Chair Covers, Fine Linens & Napkins</h3>
+                            <p>Complete table dressing with chair covers, linens, and napkins.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?centerpiece,flowers" alt="Centerpieces">
+                        </div>
+                        <div class="card-content">
+                            <h3>Centerpieces & Fresh Floral Arrangements</h3>
+                            <p>Beautiful centerpieces and fresh floral arrangements for your tables.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?fog,machine" alt="Special Effects">
+                        </div>
+                        <div class="card-content">
+                            <h3>Fog Machines</h3>
+                            <p>Create dramatic atmosphere with professional fog effects.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tableware-rentals" class="mt-2 mb-2">
+                <div class="section-title">
+                    <h2>Tableware & Catering Equipment</h2>
+                </div>
+                <p style="padding-bottom: 2rem;">Complete your dining experience with our premium tableware and serving equipment.</p>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?plates,china" alt="Breakable Plates">
+                        </div>
+                        <div class="card-content">
+                            <h3>Breakable Plates</h3>
+                            <p>Quality breakable plates for elegant dining service.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?wine,glasses" alt="Glassware">
+                        </div>
+                        <div class="card-content">
+                            <h3>Wine & Champagne Glasses</h3>
+                            <p>Premium glassware for toasts and beverage service.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?cutlery,utensils" alt="Cutlery">
+                        </div>
+                        <div class="card-content">
+                            <h3>Cutlery and Utensils</h3>
+                            <p>Complete cutlery and utensil sets for dining service.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?teapot,traditional" alt="Sake Pots">
+                        </div>
+                        <div class="card-content">
+                            <h3>Traditional & Modern Sake Pots</h3>
+                            <p>Various sizes of serving pots for beverages and traditional ceremonies.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://source.unsplash.com/random/600x400/?cups,coffee" alt="Cups">
+                        </div>
+                        <div class="card-content">
+                            <h3>Cups</h3>
+                            <p>Quality cups for beverage service at your event.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
         </div>
     </main>
 
@@ -304,9 +305,9 @@
                     <h3>Kelsa Events</h3>
                     <p>Your premier partner for event planning and rental services since 2020.</p>
                     <div class="social-links mt-2">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="https://facebook.com/KelsaEvents"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/kelsarentals"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/kelsaevents"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
@@ -324,6 +325,7 @@
                     <ul>
                         <li><i class="fas fa-map-marker-alt"></i> Shop 2B, BEAUFORT COURT ESTATE, LUGBE, ABUJA</li>
                         <li><i class="fas fa-phone"></i> +234 913 463 6775</li>
+                        <li><i class="fas fa-phone"></i> +234 802 507 1778</li>
                         <li><i class="fas fa-envelope"></i> info@kelsaevents.com</li>
                     </ul>
                 </div>
@@ -337,8 +339,10 @@
     <script src="js/main.js"></script>
     <script src="js/image-optimizer.js"></script>
     <script>
-        // Add animation on scroll
         document.addEventListener('DOMContentLoaded', function() {
+
+            
+            // Add animation on scroll
             const animateElements = document.querySelectorAll('.animate');
             
             const observer = new IntersectionObserver((entries) => {
