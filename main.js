@@ -258,11 +258,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-// Simple hamburger menu toggle
-function toggleMenu() {
-  const nav = document.getElementById('nav');
-  const hamburger = document.querySelector('.hamburger');
-  
-  nav.classList.toggle('active');
-  hamburger.classList.toggle('active');
-}
