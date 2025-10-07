@@ -412,31 +412,5 @@ input, textarea, [contenteditable] {
   }
 }
 
-/* Hide main nav and overlay by default on mobile */
-@media (max-width: 768px) {
-  .main-nav {
-    display: none;
-    position: absolute;
-    top: 70px; /* adjust as needed */
-    left: 0;
-    right: 0;
-    background: #fff;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    flex-direction: column;
-    text-align: left;
-  }
-  body.mobile-menu-open .main-nav {
-    display: flex;
-  }
-  .menu-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 99;
-  }
-  body.mobile-menu-open .menu-overlay {
-    display: block;
-  }
-}
+
+

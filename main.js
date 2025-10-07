@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavigation();
     initAnimations();
     initCurrentYear();
-    initScrollToTop();
+
     initAccessibility();
 });
 
@@ -73,6 +73,8 @@ function initNavigation() {
     
 
 }
+
+
 
 /**
  * Animation functionality with performance optimizations
@@ -119,65 +121,7 @@ function initCurrentYear() {
     });
 }
 
-/**
- * Scroll to top button
- */
-function initScrollToTop() {
-    // Create scroll to top button if it doesn't exist
-    if (!document.querySelector('.scroll-top')) {
-        const scrollBtn = document.createElement('button');
-        scrollBtn.classList.add('scroll-top');
-        scrollBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-        scrollBtn.setAttribute('aria-label', 'Scroll to top');
-        scrollBtn.style.position = 'fixed';
-        scrollBtn.style.bottom = '20px';
-        scrollBtn.style.right = '20px';
-        scrollBtn.style.display = 'none';
-        scrollBtn.style.padding = '12px';
-        scrollBtn.style.backgroundColor = 'var(--primary)';
-        scrollBtn.style.color = '#fff';
-        scrollBtn.style.border = 'none';
-        scrollBtn.style.borderRadius = '50%';
-        scrollBtn.style.cursor = 'pointer';
-        scrollBtn.style.zIndex = '999';
-        scrollBtn.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-        scrollBtn.style.transition = 'opacity 0.3s, transform 0.3s';
-        
-        document.body.appendChild(scrollBtn);
-        
-        // Show/hide button based on scroll position
-        let scrollTimeout;
-        window.addEventListener('scroll', () => {
-            // Clear the timeout if it has already been set
-            clearTimeout(scrollTimeout);
-            
-            // Set a timeout to run after scrolling ends
-            scrollTimeout = setTimeout(() => {
-                if (window.scrollY > 300) {
-                    scrollBtn.style.display = 'block';
-                    setTimeout(() => {
-                        scrollBtn.style.opacity = 1;
-                        scrollBtn.style.transform = 'translateY(0)';
-                    }, 10);
-                } else {
-                    scrollBtn.style.opacity = 0;
-                    scrollBtn.style.transform = 'translateY(20px)';
-                    setTimeout(() => {
-                        scrollBtn.style.display = 'none';
-                    }, 300);
-                }
-            }, 100);
-        }, { passive: true });
-        
-        // Scroll to top when clicked
-        scrollBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-}
+
 
 /**
  * Accessibility improvements
