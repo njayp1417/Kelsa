@@ -1162,7 +1162,7 @@ footer {
 /* Floating Action Buttons */
 .floating-actions {
   position: fixed;
-  bottom: 20px;
+  bottom: 90px;
   right: 20px;
   display: flex;
   flex-direction: column;
@@ -1200,7 +1200,7 @@ footer {
 
 @media (max-width: 768px) {
   .floating-actions {
-    bottom: 15px;
+    bottom: 100px;
     right: 15px;
   }
   
