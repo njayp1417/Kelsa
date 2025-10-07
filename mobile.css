@@ -319,36 +319,9 @@ input, textarea, [contenteditable] {
     z-index: 999;
   }
   
-  /* Scroll to Top - Enhanced */
+  /* Hide Scroll to Top on Mobile */
   .scroll-to-top {
-    position: fixed;
-    bottom: 150px;
-    right: 16px;
-    width: 48px;
-    height: 48px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    border: none;
-    box-shadow: 0 4px 16px rgba(26, 35, 126, 0.3);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transform: translateY(20px) scale(0.8);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 998;
-    font-size: 20px;
-  }
-  
-  .scroll-to-top.visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  
-  .scroll-to-top:active {
-    transform: scale(0.9);
+    display: none !important;
   }
 }
 
