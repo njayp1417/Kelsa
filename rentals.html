@@ -57,11 +57,16 @@
     </header>
 
 
-    <section class="hero" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://source.unsplash.com/random/1600x900/?event,rental') no-repeat center center/cover;">
-        <div class="hero-text">
+    <section class="hero">
+        <div class="hero-background">
+            <img src="assets/images/rentals.webp" alt="Premium Event Rentals" loading="eager" fetchpriority="high"
+                 onerror="this.onerror=null; this.src='https://source.unsplash.com/random/1600x900/?event,rental';">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
             <h1>Premium Event Rentals</h1>
             <p>Elevate your event with our high-quality rental equipment and decor</p>
-            <div class="cta-buttons">
+            <div class="hero-buttons">
                 <a href="#rental-categories" class="btn">Explore Rentals</a>
             </div>
         </div>

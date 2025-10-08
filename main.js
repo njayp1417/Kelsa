@@ -31,8 +31,14 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavigation();
     initAnimations();
     initCurrentYear();
-
     initAccessibility();
+    
+    // Remove any scroll-to-top buttons
+    removeScrollToTopButtons();
+    
+    // Monitor for dynamically added scroll-to-top buttons
+    const observer = new MutationObserver(removeScrollToTopButtons);
+    observer.observe(document.body, { childList: true, subtree: true });
 });
 
 /**
