@@ -327,10 +327,7 @@ input, textarea, [contenteditable] {
     z-index: 999;
   }
   
-  /* Hide Scroll to Top on Mobile */
-  .scroll-to-top {
-    display: none !important;
-  }
+
 }
 
 /* Small phone optimizations */
