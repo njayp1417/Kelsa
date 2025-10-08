@@ -326,6 +326,7 @@
     @media (max-width: 768px) {
         .floating-actions { bottom: 120px !important; }
     }
+    .scroll-to-top { display: none !important; }
     </style>
 
     <!-- Mobile Footer Navigation -->
@@ -360,7 +361,6 @@
             // Mobile menu toggle
             const menuToggle = document.querySelector('.mobile-menu-toggle');
             const menuOverlay = document.querySelector('.menu-overlay');
-            const scrollToTopBtn = document.querySelector('.scroll-to-top');
             
             if (menuToggle) {
                 menuToggle.addEventListener('click', function() {
@@ -372,21 +372,6 @@
             if (menuOverlay) {
                 menuOverlay.addEventListener('click', function() {
                     document.body.classList.remove('mobile-menu-open');
-                });
-            }
-            
-            // Scroll to top functionality
-            if (scrollToTopBtn) {
-                window.addEventListener('scroll', function() {
-                    if (window.pageYOffset > 300) {
-                        scrollToTopBtn.classList.add('visible');
-                    } else {
-                        scrollToTopBtn.classList.remove('visible');
-                    }
-                });
-                
-                scrollToTopBtn.addEventListener('click', function() {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             }
         });
