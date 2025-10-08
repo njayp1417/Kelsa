@@ -511,8 +511,6 @@ header {
 
 .card:hover, .card:active {
   box-shadow: var(--shadow-hover);
-  transform: translateY(-6px);
-  border-color: rgba(0,0,0,0);
 }
 
 .card::before {
@@ -522,8 +520,9 @@ header {
   left: 0;
   width: 4px;
   height: 0;
-  background: var(--accent);
-  transition: height 0.3s ease;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--primary) 100%);
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0 2px 2px 0;
 }
 
 .card:hover::before, .card:active::before {
@@ -619,33 +618,31 @@ header {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  transition: transform 0.5s ease;
-  z-index: -1;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--primary) 100%);
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0 2px 2px 0;
 }
 
 .feature:hover {
-  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
 }
 
 .feature:hover::before {
-  transform: scaleX(1);
+  height: 100%;
 }
 
 .feature i {
   font-size: 2.5rem;
   color: var(--accent);
   margin-bottom: var(--spacing-md);
-  transition: transform 0.3s ease;
+  transition: color 0.3s ease;
   display: inline-block;
 }
 
 .feature:hover i {
-  transform: scale(1.2);
+  color: var(--primary);
 }
 
 .feature h3 {

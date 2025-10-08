@@ -84,10 +84,10 @@ input, textarea, [contenteditable] {
     height: 300px;
   }
   
-  /* Hero Section - Amazon/Google Approach */
+  /* Hero Section - Google-like Compact Approach */
   .hero {
-    min-height: 70vh;
-    max-height: 600px;
+    min-height: 50vh;
+    max-height: 400px;
     padding: 0;
     display: flex;
     align-items: center;
@@ -96,26 +96,26 @@ input, textarea, [contenteditable] {
   }
   
   .hero-content {
-    padding: 16px;
-    max-width: 90%;
+    padding: 12px 16px;
+    max-width: 95%;
     text-align: center;
     z-index: 2;
   }
   
   .hero-content h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 12px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
     letter-spacing: -0.01em;
   }
   
   .hero-content p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.4;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     opacity: 0.9;
-    max-width: 280px;
+    max-width: 260px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -151,17 +151,16 @@ input, textarea, [contenteditable] {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
+    width: 4px;
+    height: 0;
+    background: linear-gradient(180deg, var(--accent) 0%, var(--primary) 100%);
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 2px 2px 0;
   }
   
   .card:hover::before,
   .card:active::before {
-    transform: scaleX(1);
+    height: 100%;
   }
   
   .card h3 {
@@ -281,27 +280,39 @@ input, textarea, [contenteditable] {
     transform: translateX(-50%);
   }
   
-  /* Button Layout - Amazon/Google Style */
+  /* Button Layout - Contact Page Mobile */
   .hero-buttons {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
-    max-width: 260px;
+    max-width: 280px;
     margin: 0 auto;
+    justify-content: center;
   }
   
   .hero-buttons .btn {
-    width: 100%;
-    padding: 12px 20px;
+    flex: 1;
+    padding: 12px 16px;
     font-size: 14px;
-    font-weight: 600;
-    border-radius: 6px;
+    font-weight: 500;
+    border-radius: 25px;
     margin-bottom: 0;
   }
   
-  /* Hide Get a Quote button on mobile, keep Event Services and Rentals */
-  .hero-buttons .btn:nth-child(2) {
+  /* Page-specific button hiding on mobile */
+  
+  /* Index page: hide 2nd button (Get a Quote) */
+  body.index-page .hero-buttons .btn:nth-child(2) {
+    display: none;
+  }
+  
+  /* Contact page: hide 3rd button (Call Now) */
+  body.contact-page .hero-buttons .btn:nth-child(3) {
+    display: none;
+  }
+  
+  /* Event page: hide 3rd button (Get a Quote) */
+  body.event-page .hero-buttons .btn:nth-child(3) {
     display: none;
   }
   
