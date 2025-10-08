@@ -16,6 +16,15 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a237e">
     
+    <style>
+    @media (min-width: 769px) {
+        .mobile-footer-nav { display: none !important; }
+    }
+    @media (max-width: 768px) {
+        .mobile-footer-nav { display: flex !important; }
+    }
+    </style>
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5H6Q75N2P"></script>
     <script>
@@ -342,12 +351,7 @@
     </div>
 
     <!-- Mobile Footer Navigation -->
-    <nav class="mobile-footer-nav" style="display: none;"> 
-    <style>
-    @media (max-width: 768px) {
-        .mobile-footer-nav { display: flex !important; }
-    }
-    </style>
+    <nav class="mobile-footer-nav">
         <a href="index.html">
             <i class="fas fa-home"></i>
             <span>Home</span>
