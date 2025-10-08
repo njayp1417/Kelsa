@@ -175,30 +175,4 @@ function initAccessibility() {
     });
 }
 
-/**
- * Smooth scroll to element
- * @param {string} targetId - The ID of the target element
- */
-function smoothScrollTo(targetId) {
-    const targetElement = document.getElementById(targetId);
-    
-    if (targetElement) {
-        window.scrollTo({
-            top: targetElement.offsetTop - 100,
-            behavior: 'smooth'
-        });
-    }
-}
 
-// Initialize smooth scrolling for anchor links
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const targetId = this.getAttribute('href').substring(1);
-            if (targetId) {
-                e.preventDefault();
-                smoothScrollTo(targetId);
-            }
-        });
-    });
-});

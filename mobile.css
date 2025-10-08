@@ -384,10 +384,7 @@ input, textarea, [contenteditable] {
     border-top: 1px solid #333;
   }
   
-  .scroll-to-top {
-    background-color: var(--accent);
-    color: var(--primary-dark);
-  }
+
 }
 
 

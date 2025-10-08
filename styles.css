@@ -1151,21 +1151,7 @@ footer {
   }
 }
 
-/* Completely disable scroll-to-top buttons */
-.scroll-to-top, 
-[class*="scroll-to-top"], 
-[id*="scroll-to-top"],
-.scroll-top,
-[class*="scroll-top"],
-[id*="scroll-top"],
-.back-to-top,
-[class*="back-to-top"],
-[id*="back-to-top"] { 
-  display: none !important; 
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
+
 
 /* Stylish font for contact information list */
 .card h3 + ul {
