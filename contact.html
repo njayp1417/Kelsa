@@ -183,6 +183,21 @@
                     </div>
                 </div>
                 
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;">
+                        <div style="flex: 0 0 auto; text-align: center;">
+                            <img src="assets/images/kelsa_manager.webp" alt="Kelsa Events Manager" 
+                                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 4px solid var(--accent);">
+                        </div>
+                        <div style="flex: 1 1 300px;">
+                            <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Meet Our Team Leader</h3>
+                            <h4 style="color: var(--accent); margin-bottom: 1rem; font-weight: 600;">Mrs Kelechi Akinwande</h4>
+                            <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 1rem;">With over 5 years of experience in event management and a passion for creating memorable experiences, Mrs Akinwande ensures every event receives personalized attention and professional execution.</p>
+                            <p style="font-style: italic; color: var(--primary); font-weight: 500;">"We don't just plan events, we create lasting memories that bring joy to families and communities across the country."</p>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="cards-container">
                     <div class="card">
                         <div style="text-align: center; margin-bottom: 1rem;">
@@ -319,6 +334,18 @@
     <style>
     @media (max-width: 768px) {
         .floating-actions { bottom: 120px !important; }
+        
+        /* Manager image mobile responsiveness */
+        .card div[style*="flex-wrap: wrap"] {
+            text-align: center !important;
+        }
+        .card div[style*="flex: 0 0 auto"] {
+            flex: 1 1 100% !important;
+            margin-bottom: 1rem;
+        }
+        .card div[style*="flex: 1 1 300px"] {
+            flex: 1 1 100% !important;
+        }
     }
     </style>
 
