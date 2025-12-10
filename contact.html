@@ -47,6 +47,30 @@
                     <a href="event.html">Event Services</a>
                     <a href="contact.html" class="active">Contact</a>
                 </nav>
+                
+                <div class="auth-hamburger" id="authHamburger">
+                    <i class="fas fa-user"></i>
+                    <div class="auth-dropdown" id="authDropdown">
+                        <div class="auth-dropdown-content">
+                            <div class="auth-section" id="authSection">
+                                <a href="#" id="loginBtn" class="auth-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                                <a href="#" id="signupBtn" class="auth-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+                            </div>
+                            <div class="user-section" id="userSection" style="display: none;">
+                                <div class="user-info" id="userInfo">
+                                    <div class="avatar-circle"></div>
+                                    <span class="user-name"></span>
+                                </div>
+                                <div class="user-menu">
+                                    <a href="#" class="dropdown-item"><i class="fas fa-calendar"></i> My Bookings</a>
+                                    <a href="#" class="dropdown-item"><i class="fas fa-user-cog"></i> Account Settings</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#" class="dropdown-item" id="signOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="menu-overlay"></div>
             </div>
         </div>
@@ -98,7 +122,12 @@
                     
                     <div class="card">
                         <h3>Send Us a Message</h3>
-                        <form class="contact-form" id="contactForm">
+                        <form class="contact-form" id="contactForm" action="https://formsubmit.co/kelsarentalsevent@gmail.com" method="POST">
+                            <input type="hidden" name="_subject" value="New Contact Form Submission - Kelsa Events">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_next" value="https://njayp1417.github.io/Kelsa/contact.html?success=true">
+                            
                             <div class="form-group">
                                 <label for="name" class="form-label">Your Name</label>
                                 <input type="text" id="name" name="name" class="form-control" required 
@@ -374,9 +403,63 @@
         </a>
     </nav>
 
+    <!-- Authentication Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <span class="auth-close">&times;</span>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Sign In</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+            
+            <div id="authMessage"></div>
+            
+            <div id="loginTab" class="auth-tab-content active">
+                <h2>Welcome Back</h2>
+                <button id="googleSignIn" class="btn-google">
+                    <i class="fab fa-google"></i>
+                    Continue with Google
+                </button>
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                <form id="emailSignInForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Send Sign In Link</button>
+                </form>
+            </div>
+            
+            <div id="signupTab" class="auth-tab-content">
+                <h2>Create Account</h2>
+                <button id="googleSignUp" class="btn-google">
+                    <i class="fab fa-google"></i>
+                    Continue with Google
+                </button>
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                <form id="emailSignUpForm">
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" required>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Send Sign Up Link</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-modal.js"></script>
     <script src="js/main.js"></script>
     <script src="js/image-optimizer.js"></script>
     <script src="js/form-validator.js"></script>
+    <script src="js/form-handler.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Set current year in footer
