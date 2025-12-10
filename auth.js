@@ -230,41 +230,37 @@ class KelsaAuth {
 
     // Update UI based on authentication state
     updateUI(user) {
-        const authSection = document.getElementById('authSection');
-        const userSection = document.getElementById('userSection');
-        const userInfo = document.getElementById('userInfo');
-        const signOutBtn = document.getElementById('signOutBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
         
         if (user) {
-            // User is signed in - show user section
-            if (authSection) authSection.style.display = 'none';
-            if (userSection) userSection.style.display = 'block';
-            
-            if (userInfo) {
-                const userName = userInfo.querySelector('.user-name');
-                const avatarCircle = userInfo.querySelector('.avatar-circle');
-                
-                if (userName) {
-                    const displayName = user.displayName || user.email || 'User';
-                    userName.textContent = displayName;
-                }
-                
-                if (avatarCircle) {
-                    const firstLetter = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
-                    avatarCircle.textContent = firstLetter;
-                }
+            // User is signed in - update buttons to show user info and logout
+            if (loginBtn) {
+                loginBtn.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email || 'Account'}`;
+                loginBtn.onclick = (e) => {
+                    e.preventDefault();
+                    this.showUserMenu();
+                };
             }
             
-            if (signOutBtn) {
-                signOutBtn.onclick = (e) => {
+            if (signupBtn) {
+                signupBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sign Out';
+                signupBtn.onclick = (e) => {
                     e.preventDefault();
                     this.signOut();
                 };
             }
         } else {
-            // User is signed out - show auth section
-            if (authSection) authSection.style.display = 'block';
-            if (userSection) userSection.style.display = 'none';
+            // User is signed out - restore original buttons
+            if (loginBtn) {
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+                loginBtn.onclick = null;
+            }
+            
+            if (signupBtn) {
+                signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Sign Up';
+                signupBtn.onclick = null;
+            }
         }
     }
 
