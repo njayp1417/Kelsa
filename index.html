@@ -374,7 +374,7 @@
     <script src="js/form-handler.js"></script>
 
     
-    <!-- Inline Authentication Functions -->
+    <!-- Inline Authentication System -->
     <script>
     // Authentication message display function
     function showAuthMessage(message, type) {
@@ -416,6 +416,7 @@
             }
         });
         
+        
         if (tabName === 'login') {
             loginTab.style.display = 'block';
             signupTab.style.display = 'none';
@@ -424,6 +425,122 @@
             signupTab.style.display = 'block';
         }
     }
+    
+    // Inline KelsaAuth class
+    class KelsaAuth {
+        constructor() {
+            this.currentUser = null;
+            this.init();
+        }
+        
+        init() {
+            document.addEventListener('DOMContentLoaded', () => {
+                if (typeof firebase !== 'undefined') {
+                    firebase.auth().onAuthStateChanged((user) => {
+                        this.currentUser = user;
+                        this.updateUI(user);
+                    });
+                }
+            });
+        }
+        
+        async signInWithGoogle() {
+            try {
+                showAuthMessage('Signing in with Google...', 'loading');
+                
+                const provider = new firebase.auth.GoogleAuthProvider();
+                provider.addScope('email');
+                provider.addScope('profile');
+                
+                const result = await firebase.auth().signInWithPopup(provider);
+                
+                showAuthMessage('Successfully signed in with Google!', 'success');
+                
+                setTimeout(() => {
+                    document.getElementById('authModal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Google sign in error:', error);
+                showAuthMessage(error.message || 'Sign in failed', 'error');
+            }
+        }
+        
+        async handleEmailSignIn(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            
+            if (!email) {
+                showAuthMessage('Please enter your email address', 'error');
+                return;
+            }
+            
+            try {
+                showAuthMessage('Sending sign in link...', 'loading');
+                
+                const actionCodeSettings = {
+                    url: window.location.origin + window.location.pathname,
+                    handleCodeInApp: true,
+                };
+                
+                await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
+                
+                localStorage.setItem('emailForSignIn', email);
+                
+                showAuthMessage('Sign in link sent! Check your email.', 'success');
+                
+            } catch (error) {
+                console.error('Email sign in error:', error);
+                showAuthMessage(error.message || 'Sign in failed', 'error');
+            }
+        }
+        
+        async handleEmailSignUp(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('signupEmail').value.trim();
+            
+            if (!email) {
+                showAuthMessage('Please enter your email address', 'error');
+                return;
+            }
+            
+            try {
+                showAuthMessage('Sending sign up link...', 'loading');
+                
+                const actionCodeSettings = {
+                    url: window.location.origin + window.location.pathname,
+                    handleCodeInApp: true,
+                };
+                
+                await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
+                
+                localStorage.setItem('emailForSignIn', email);
+                
+                showAuthMessage('Sign up link sent! Check your email.', 'success');
+                
+            } catch (error) {
+                console.error('Email sign up error:', error);
+                showAuthMessage(error.message || 'Sign up failed', 'error');
+            }
+        }
+        
+        updateUI(user) {
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            
+            if (user && loginBtn && signupBtn) {
+                loginBtn.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email || 'Account'}`;
+                signupBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sign Out';
+                signupBtn.onclick = () => firebase.auth().signOut();
+            }
+        }
+    }
+    
+    // Initialize authentication
+    window.kelsaAuth = new KelsaAuth();
     </script>
     
     <!-- Inline Hamburger Menu Script -->
