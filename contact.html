@@ -100,12 +100,7 @@
                     
                     <div class="card">
                         <h3>Send Us a Message</h3>
-                        <form class="contact-form" id="contactForm" action="https://formsubmit.co/nelsonasagwara81@gmail.com" method="POST">
-                            <input type="hidden" name="_subject" value="New Contact Form Submission - Kelsa Events">
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_template" value="table">
-                            <input type="hidden" name="_next" value="https://njayp1417.github.io/Kelsa/contact.html?success=true">
-                            
+                        <form class="contact-form" id="contactForm" onsubmit="sendEmail(event)">
                             <div class="form-group">
                                 <label for="name" class="form-label">Your Name</label>
                                 <input type="text" id="name" name="name" class="form-control" required 
@@ -147,6 +142,25 @@
                             
                             <button type="submit" class="btn">Send Message</button>
                         </form>
+                        
+                        <script>
+                        function sendEmail(event) {
+                            event.preventDefault();
+                            
+                            const name = document.getElementById('name').value;
+                            const email = document.getElementById('email').value;
+                            const phone = document.getElementById('phone').value;
+                            const eventType = document.getElementById('eventType').value;
+                            const message = document.getElementById('message').value;
+                            
+                            const subject = 'New Contact Form Submission - Kelsa Events';
+                            const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0AEvent Type: ${eventType}%0D%0A%0D%0AMessage:%0D%0A${message}`;
+                            
+                            const mailtoLink = `mailto:nelsonasagwara81@gmail.com?subject=${subject}&body=${body}`;
+                            
+                            window.location.href = mailtoLink;
+                        }
+                        </script>
                     </div>
                 </div>
             </section>
