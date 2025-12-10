@@ -550,13 +550,63 @@
         }
         
         updateUI(user) {
-            const loginBtn = document.getElementById('loginBtn');
-            const signupBtn = document.getElementById('signupBtn');
+            const authDropdown = document.getElementById('authDropdown');
             
-            if (user && loginBtn && signupBtn) {
-                loginBtn.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email || 'Account'}`;
-                signupBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sign Out';
-                signupBtn.onclick = () => firebase.auth().signOut();
+            if (user && authDropdown) {
+                // User is signed in - replace dropdown content
+                authDropdown.innerHTML = `
+                    <div style="padding: 12px 16px; border-bottom: 1px solid #eee; background: #f8f9fc;">
+                        <div style="font-weight: 600; color: #1a237e; font-size: 0.9rem;">${user.displayName || 'User'}</div>
+                        <div style="font-size: 0.8rem; color: #757575;">${user.email}</div>
+                    </div>
+                    <button onclick="firebase.auth().signOut()" style="width: 100%; padding: 12px 16px; background: none; border: none; text-align: left; cursor: pointer; color: #d32f2f; font-weight: 500; transition: background 0.2s; display: flex; align-items: center; gap: 8px;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                `;
+            } else if (authDropdown) {
+                // User is signed out - restore original dropdown
+                authDropdown.innerHTML = `
+                    <a href="#" id="loginBtn" 
+                       style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none; transition: background-color 0.3s ease; border-bottom: 1px solid rgba(0,0,0,0.05);" 
+                       onmouseover="this.style.background='#f8f9fc'; this.style.color='#1a237e'" 
+                       onmouseout="this.style.background='white'; this.style.color='#333'">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </a>
+                    <a href="#" id="signupBtn" 
+                       style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none; transition: background-color 0.3s ease;" 
+                       onmouseover="this.style.background='#f8f9fc'; this.style.color='#1a237e'" 
+                       onmouseout="this.style.background='white'; this.style.color='#333'">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                `;
+                
+                // Re-attach event listeners
+                setTimeout(() => {
+                    const loginBtn = document.getElementById('loginBtn');
+                    const signupBtn = document.getElementById('signupBtn');
+                    
+                    if (loginBtn) {
+                        loginBtn.onclick = (e) => {
+                            e.preventDefault();
+                            authDropdown.style.opacity = '0';
+                            authDropdown.style.visibility = 'hidden';
+                            document.getElementById('authModal').style.display = 'block';
+                            document.body.style.overflow = 'hidden';
+                            switchAuthTab('login');
+                        };
+                    }
+                    
+                    if (signupBtn) {
+                        signupBtn.onclick = (e) => {
+                            e.preventDefault();
+                            authDropdown.style.opacity = '0';
+                            authDropdown.style.visibility = 'hidden';
+                            document.getElementById('authModal').style.display = 'block';
+                            document.body.style.overflow = 'hidden';
+                            switchAuthTab('signup');
+                        };
+                    }
+                }, 100);
             }
         }
     }
