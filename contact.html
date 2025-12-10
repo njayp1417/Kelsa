@@ -40,6 +40,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     
+    // Global auth functions
     window.handleGoogleSignIn = async function() {
         try {
             showAuthMessage('Signing in with Google...', 'loading');
@@ -107,54 +108,76 @@
                     '<i class="fas fa-spinner fa-spin"></i>';
         container.innerHTML = `${icon} ${message}`;
         container.style.display = 'block';
-        container.style.background = type === 'success' ? '#d4edda' :
-                                   type === 'error' ? '#f8d7da' : '#d1ecf1';
-        container.style.color = type === 'success' ? '#155724' :
-                               type === 'error' ? '#721c24' : '#0c5460';
-        container.style.border = `1px solid ${type === 'success' ? '#c3e6cb' :
-                                              type === 'error' ? '#f5c6cb' : '#bee5eb'}`;
+        container.style.background = type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1';
+        container.style.color = type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460';
+        container.style.border = `1px solid ${type === 'success' ? '#c3e6cb' : type === 'error' ? '#f5c6cb' : '#bee5eb'}`;
+        if (type !== 'loading') {
+            setTimeout(() => { if (container) container.style.display = 'none'; }, 5000);
+        }
     };
     
-    window.closeAuthModal = function() {
-        const modal = document.getElementById('authModal');
-        if (modal) {
-            modal.style.display = 'none';
+    function closeAuthModal() {
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-        const messageContainer = document.getElementById('authMessage');
-        if (messageContainer) messageContainer.style.display = 'none';
-    };
+    }
     
-    onAuthStateChanged(auth, (user) => {
+    document.addEventListener('DOMContentLoaded', function() {
         const authHamburger = document.getElementById('authHamburger');
         const authDropdown = document.getElementById('authDropdown');
         
-        if (user && authDropdown) {
-            const displayName = user.displayName || user.email?.split('@')[0] || 'User';
-            const photoURL = user.photoURL;
+        if (authHamburger && authDropdown) {
+            authHamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isVisible = authDropdown.style.opacity === '1';
+                if (isVisible) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                } else {
+                    authDropdown.style.opacity = '1';
+                    authDropdown.style.visibility = 'visible';
+                    authDropdown.style.transform = 'translateY(0)';
+                }
+            });
             
+            document.addEventListener('click', function(e) {
+                if (!authHamburger.contains(e.target) && !authDropdown.contains(e.target)) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                }
+            });
+        }
+    });
+    
+    onAuthStateChanged(auth, user => {
+        const authDropdown = document.getElementById('authDropdown');
+        if (!authDropdown) return;
+        
+        if (user) {
             authDropdown.innerHTML = `
-                <div style="padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px;">
-                    ${photoURL ? `<img src="${photoURL}" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">` : '<i class="fas fa-user-circle" style="font-size: 32px; color: #1a237e;"></i>'}
-                    <div>
-                        <div style="font-weight: 600; color: #1a237e; font-size: 0.9rem;">${displayName}</div>
-                        <div style="font-size: 0.8rem; color: #666;">${user.email}</div>
-                    </div>
+                <div style="padding: 15px; border-bottom: 1px solid #eee; background: #f8f9fc;">
+                    <strong style="color: #1a237e;">${user.displayName || "User"}</strong><br>
+                    <small style="color: #757575;">${user.email}</small>
                 </div>
-                <a href="#" onclick="handleSignOut(); return false;" 
-                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #dc3545; text-decoration: none;" 
-                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
+                <a href="#" onclick="signOut(getAuth()); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #d32f2f; text-decoration: none;" 
+                   onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">
                     <i class="fas fa-sign-out-alt"></i> Sign Out
                 </a>
             `;
-        } else if (authDropdown) {
+        } else {
             authDropdown.innerHTML = `
-                <a href="#" onclick="openAuthModal('login'); return false;" 
+                <a href="#" onclick="openAuthModal('login'); return false;"
                    style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.05);" 
                    onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
                     <i class="fas fa-sign-in-alt"></i> Sign In
                 </a>
-                <a href="#" onclick="openAuthModal('signup'); return false;" 
+                <a href="#" onclick="openAuthModal('signup'); return false;"
                    style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none;" 
                    onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
                     <i class="fas fa-user-plus"></i> Sign Up
@@ -163,13 +186,52 @@
         }
     });
     
-    window.handleSignOut = async function() {
-        try {
-            await signOut(auth);
-        } catch (error) {
-            console.error('Sign out error:', error);
+    window.firebaseAuth = auth;
+    </script>
+    
+    <script>
+    function openAuthModal(tab = 'login') {
+        const authModal = document.getElementById('authModal');
+        const authDropdown = document.getElementById('authDropdown');
+        if (authModal) {
+            authModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            switchAuthTab(tab);
         }
-    };
+        if (authDropdown) {
+            authDropdown.style.opacity = '0';
+            authDropdown.style.visibility = 'hidden';
+            authDropdown.style.transform = 'translateY(-10px)';
+        }
+    }
+    
+    function switchAuthTab(tabName) {
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        
+        authTabs.forEach(tab => {
+            if (tab.getAttribute('data-tab') === tabName) {
+                tab.style.background = 'white';
+                tab.style.color = '#1a237e';
+                tab.style.borderBottom = '3px solid #1a237e';
+            } else {
+                tab.style.background = 'none';
+                tab.style.color = '#757575';
+                tab.style.borderBottom = 'none';
+            }
+        });
+        
+        if (loginTab && signupTab) {
+            if (tabName === 'login') {
+                loginTab.style.display = 'block';
+                signupTab.style.display = 'none';
+            } else {
+                loginTab.style.display = 'none';
+                signupTab.style.display = 'block';
+            }
+        }
+    }
     </script>
 </head>
 <body class="contact-page">
@@ -605,94 +667,7 @@
         </a>
     </nav>
 
-    <!-- Fallback Authentication Handler -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const authHamburger = document.getElementById('authHamburger');
-        const authDropdown = document.getElementById('authDropdown');
-        
-        if (authHamburger && authDropdown) {
-            authDropdown.innerHTML = `
-                <a href="#" onclick="openAuthModal('login'); return false;" 
-                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.05);" 
-                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
-                </a>
-                <a href="#" onclick="openAuthModal('signup'); return false;" 
-                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none;" 
-                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </a>
-            `;
-            
-            authHamburger.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                const isVisible = authDropdown.style.opacity === '1';
-                if (isVisible) {
-                    authDropdown.style.opacity = '0';
-                    authDropdown.style.visibility = 'hidden';
-                    authDropdown.style.transform = 'translateY(-10px)';
-                } else {
-                    authDropdown.style.opacity = '1';
-                    authDropdown.style.visibility = 'visible';
-                    authDropdown.style.transform = 'translateY(0)';
-                }
-            });
-            
-            document.addEventListener('click', function(e) {
-                if (!authHamburger.contains(e.target) && !authDropdown.contains(e.target)) {
-                    authDropdown.style.opacity = '0';
-                    authDropdown.style.visibility = 'hidden';
-                    authDropdown.style.transform = 'translateY(-10px)';
-                }
-            });
-        }
-    });
-    
-    function openAuthModal(tab = 'login') {
-        const authModal = document.getElementById('authModal');
-        const authDropdown = document.getElementById('authDropdown');
-        if (authModal) {
-            authModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            switchAuthTab(tab);
-        }
-        if (authDropdown) {
-            authDropdown.style.opacity = '0';
-            authDropdown.style.visibility = 'hidden';
-            authDropdown.style.transform = 'translateY(-10px)';
-        }
-    }
-    
-    function switchAuthTab(tabName) {
-        const authTabs = document.querySelectorAll('.auth-tab');
-        const loginTab = document.getElementById('loginTab');
-        const signupTab = document.getElementById('signupTab');
-        
-        authTabs.forEach(tab => {
-            if (tab.getAttribute('data-tab') === tabName) {
-                tab.style.background = 'white';
-                tab.style.color = '#1a237e';
-                tab.style.borderBottom = '3px solid #1a237e';
-            } else {
-                tab.style.background = 'none';
-                tab.style.color = '#757575';
-                tab.style.borderBottom = 'none';
-            }
-        });
-        
-        if (loginTab && signupTab) {
-            if (tabName === 'login') {
-                loginTab.style.display = 'block';
-                signupTab.style.display = 'none';
-            } else {
-                loginTab.style.display = 'none';
-                signupTab.style.display = 'block';
-            }
-        }
-    }
-    </script>
+
     
 
     <script src="js/main.js"></script>
