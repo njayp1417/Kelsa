@@ -198,6 +198,12 @@
     
     window.handleSignOut = async function() {
         try {
+            const authDropdown = document.getElementById('authDropdown');
+            if (authDropdown) {
+                authDropdown.style.opacity = '0';
+                authDropdown.style.visibility = 'hidden';
+                authDropdown.style.transform = 'translateY(-10px)';
+            }
             await signOut(auth);
         } catch (error) {
             console.error('Sign out error:', error);
