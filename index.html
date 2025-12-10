@@ -370,20 +370,26 @@
     
     <!-- Inline Firebase Configuration -->
     <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyCCng5B1NsrAugglmy5au8b8tB2NAEp2lA",
-        authDomain: "kelsa-events.firebaseapp.com",
-        projectId: "kelsa-events",
-        storageBucket: "kelsa-events.firebasestorage.app",
-        messagingSenderId: "137881039928",
-        appId: "1:137881039928:web:701eb84377311f84c9e2cd"
-    };
+    function initializeFirebase() {
+        if (typeof firebase !== 'undefined') {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCCng5B1NsrAugglmy5au8b8tB2NAEp2lA",
+                authDomain: "kelsa-events.firebaseapp.com",
+                projectId: "kelsa-events",
+                storageBucket: "kelsa-events.firebasestorage.app",
+                messagingSenderId: "137881039928",
+                appId: "1:137881039928:web:701eb84377311f84c9e2cd"
+            };
+            
+            firebase.initializeApp(firebaseConfig);
+            window.kelsaAuth = new KelsaAuth();
+        } else {
+            setTimeout(initializeFirebase, 100);
+        }
+    }
     
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    
-    // Initialize Firebase Auth
-    const auth = firebase.auth();
+    // Start initialization when page loads
+    window.addEventListener('load', initializeFirebase);
     </script>
     <script src="js/main.js"></script>
     <script src="js/image-optimizer.js"></script>
@@ -554,9 +560,7 @@
             }
         }
     }
-    
-    // Initialize authentication
-    window.kelsaAuth = new KelsaAuth();
+
     </script>
     
     <!-- Inline Hamburger Menu Script -->
