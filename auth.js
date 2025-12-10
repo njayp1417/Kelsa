@@ -230,38 +230,41 @@ class KelsaAuth {
 
     // Update UI based on authentication state
     updateUI(user) {
-        // Update hamburger menu
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
+        const authSection = document.getElementById('authSection');
+        const userSection = document.getElementById('userSection');
+        const userInfo = document.getElementById('userInfo');
+        const signOutBtn = document.getElementById('signOutBtn');
         
         if (user) {
-            // User is signed in - update hamburger to show user info and logout
-            if (loginBtn) {
-                loginBtn.textContent = user.displayName || user.email || 'Account';
-                loginBtn.onclick = (e) => {
-                    e.preventDefault();
-                    this.showUserMenu();
-                };
+            // User is signed in - show user section
+            if (authSection) authSection.style.display = 'none';
+            if (userSection) userSection.style.display = 'block';
+            
+            if (userInfo) {
+                const userName = userInfo.querySelector('.user-name');
+                const avatarCircle = userInfo.querySelector('.avatar-circle');
+                
+                if (userName) {
+                    const displayName = user.displayName || user.email || 'User';
+                    userName.textContent = displayName;
+                }
+                
+                if (avatarCircle) {
+                    const firstLetter = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+                    avatarCircle.textContent = firstLetter;
+                }
             }
             
-            if (signupBtn) {
-                signupBtn.textContent = 'Sign Out';
-                signupBtn.onclick = (e) => {
+            if (signOutBtn) {
+                signOutBtn.onclick = (e) => {
                     e.preventDefault();
                     this.signOut();
                 };
             }
         } else {
-            // User is signed out - restore original hamburger functionality
-            if (loginBtn) {
-                loginBtn.textContent = 'Sign In';
-                loginBtn.onclick = null;
-            }
-            
-            if (signupBtn) {
-                signupBtn.textContent = 'Sign Up';
-                signupBtn.onclick = null;
-            }
+            // User is signed out - show auth section
+            if (authSection) authSection.style.display = 'block';
+            if (userSection) userSection.style.display = 'none';
         }
     }
 
