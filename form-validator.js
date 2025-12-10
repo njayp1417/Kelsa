@@ -36,8 +36,7 @@ class FormValidator {
       input.addEventListener('input', () => this.handleInput(input.id));
     });
     
-    // Form submission handler
-    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    // Form submission handler removed - using inline handler instead
   }
   
   // Get validation rules based on input attributes
@@ -156,41 +155,15 @@ class FormValidator {
     }
   }
   
-  // Handle form submission
-  handleSubmit(e) {
-    e.preventDefault();
-    this.isSubmitting = true;
-    
-    // Validate all fields
+  // Validate all form fields (called by inline submit handler)
+  validateAllFields() {
     let isFormValid = true;
     for (const fieldId in this.fields) {
       const isFieldValid = this.validateField(fieldId);
       isFormValid = isFormValid && isFieldValid;
     }
     
-    // If form is valid, submit it
-    if (isFormValid) {
-      // Show loading state
-      this.showLoading();
-      
-      // Get form data
-      const formData = new FormData(this.form);
-      const formValues = Object.fromEntries(formData.entries());
-      
-      // Simulate form submission (replace with actual submission)
-      setTimeout(() => {
-        this.showSuccess();
-        
-        // For demo purposes, show success message
-        this.form.innerHTML = `
-          <div style="text-align: center; padding: 2rem 1rem;">
-            <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
-            <h3>Thank You!</h3>
-            <p>Your message has been sent successfully. We'll get back to you shortly.</p>
-          </div>
-        `;
-      }, 1500);
-    } else {
+    if (!isFormValid) {
       // Scroll to first error
       const firstErrorField = this.form.querySelector('.invalid');
       if (firstErrorField) {
@@ -198,6 +171,8 @@ class FormValidator {
         firstErrorField.focus();
       }
     }
+    
+    return isFormValid;
   }
   
   // Show error message for a field
