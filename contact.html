@@ -163,20 +163,20 @@
                             const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nEvent Type: ${eventType}\n\nMessage:\n${message}`);
                             
                             // Try to open email client
-                            const mailtoLink = `mailto:info@kelsaevents.com?subject=${subject}&body=${body}`;
+                            const mailtoLink = `mailto:kelsarentalsevent@gmail.com?subject=${subject}&body=${body}`;
                             
                             // Try mailto first
                             window.location.href = mailtoLink;
                             
                             // Show fallback after 2 seconds if mailto didn't work
                             setTimeout(() => {
-                                const emailContent = `To: info@kelsaevents.com\nSubject: New Contact - ${name}\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nEvent Type: ${eventType}\n\nMessage:\n${message}`;
+                                const emailContent = `To: kelsarentalsevent@gmail.com\nSubject: New Contact - ${name}\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nEvent Type: ${eventType}\n\nMessage:\n${message}`;
                                 
                                 if (confirm('Email client not opening? Click OK to copy the message and send manually.')) {
                                     navigator.clipboard.writeText(emailContent).then(() => {
-                                        alert('Message copied! Paste it into your email and send to info@kelsaevents.com');
+                                        alert('Message copied! Paste it into your email and send to kelsarentalsevent@gmail.com');
                                     }).catch(() => {
-                                        alert('Please copy this message and email it to info@kelsaevents.com:\n\n' + emailContent);
+                                        alert('Please copy this message and email it to kelsarentalsevent@gmail.com:\n\n' + emailContent);
                                     });
                                 }
                             }, 2000);
