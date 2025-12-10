@@ -523,7 +523,16 @@
         </a>
     </div>
     <style>
-    /* Auth Hamburger Styles */
+    :root {
+        --primary: #1a237e;
+        --primary-dark: #0d1142;
+        --accent: #ffd700;
+        --text: #333;
+        --success: #28a745;
+        --radius: 8px;
+        --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
     .auth-hamburger {
         position: relative;
         display: inline-block;
@@ -572,7 +581,7 @@
         align-items: center;
         gap: 12px;
         padding: 12px 16px;
-        color: var(--text);
+        color: #333;
         text-decoration: none;
         border-radius: 8px;
         transition: background-color 0.2s ease;
@@ -582,6 +591,42 @@
     
     .auth-btn:hover {
         background-color: #f8f9fa;
+    }
+    
+    .auth-modal {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    
+    .auth-modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        position: relative;
+    }
+    
+    .auth-close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        right: 15px;
+        top: 10px;
+    }
+    
+    .auth-close:hover {
+        color: black;
     }
     
     @media (max-width: 768px) {
@@ -707,68 +752,62 @@
         });
         
         // Fallback Auth Hamburger Script
-        const authHamburger = document.getElementById('authHamburger');
-        const authDropdown = document.getElementById('authDropdown');
-        
-        if (authHamburger && authDropdown) {
-            authHamburger.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                authDropdown.classList.toggle('show');
-            });
-            
-            document.addEventListener('click', function(e) {
-                if (!authHamburger.contains(e.target)) {
-                    authDropdown.classList.remove('show');
-                }
-            });
-            
+        (function() {
+            const authHamburger = document.getElementById('authHamburger');
+            const authDropdown = document.getElementById('authDropdown');
+            const authModal = document.getElementById('authModal');
+            const authClose = document.querySelector('.auth-close');
             const loginBtn = document.getElementById('loginBtn');
             const signupBtn = document.getElementById('signupBtn');
             
-            if (loginBtn) {
-                loginBtn.addEventListener('click', function(e) {
+            if (authHamburger && authDropdown) {
+                authHamburger.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const modal = document.getElementById('authModal');
-                    if (modal) {
-                        modal.style.display = 'block';
-                        document.body.style.overflow = 'hidden';
+                    e.stopPropagation();
+                    authDropdown.classList.toggle('show');
+                });
+                
+                document.addEventListener('click', function(e) {
+                    if (!authHamburger.contains(e.target)) {
+                        authDropdown.classList.remove('show');
                     }
                 });
             }
             
-            if (signupBtn) {
+            if (loginBtn && authModal) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    authModal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    authDropdown.classList.remove('show');
+                });
+            }
+            
+            if (signupBtn && authModal) {
                 signupBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const modal = document.getElementById('authModal');
-                    if (modal) {
-                        modal.style.display = 'block';
-                        document.body.style.overflow = 'hidden';
+                    authModal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    authDropdown.classList.remove('show');
+                });
+            }
+            
+            if (authClose && authModal) {
+                authClose.addEventListener('click', function() {
+                    authModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+            
+            if (authModal) {
+                authModal.addEventListener('click', function(e) {
+                    if (e.target === authModal) {
+                        authModal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
                     }
                 });
             }
-        }
-        
-        const authModal = document.getElementById('authModal');
-        const authClose = document.querySelector('.auth-close');
-        
-        if (authClose) {
-            authClose.addEventListener('click', function() {
-                if (authModal) {
-                    authModal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
-        }
-        
-        if (authModal) {
-            authModal.addEventListener('click', function(e) {
-                if (e.target === authModal) {
-                    authModal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
-        }
+        })()
     </script>
 </body>
 </html>
