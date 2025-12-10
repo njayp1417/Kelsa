@@ -1405,10 +1405,27 @@ footer {
   display: none;
   padding: var(--spacing-xl);
   padding-top: var(--spacing-lg);
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
 }
 
 .auth-tab-content.active {
   display: block;
+  opacity: 1;
+  transform: translateX(0);
+  animation: slideInTab 0.3s ease forwards;
+}
+
+@keyframes slideInTab {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .auth-tab-content h2 {

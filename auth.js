@@ -230,39 +230,37 @@ class KelsaAuth {
 
     // Update UI based on authentication state
     updateUI(user) {
-        // Update navigation
-        const loginLink = document.querySelector('a[href="login.html"]');
-        const signupLink = document.querySelector('a[href="signup.html"]');
+        // Update hamburger menu
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
         
         if (user) {
-            // User is signed in
-            if (loginLink) {
-                loginLink.textContent = user.displayName || user.email || 'Account';
-                loginLink.href = '#';
-                loginLink.addEventListener('click', (e) => {
+            // User is signed in - update hamburger to show user info and logout
+            if (loginBtn) {
+                loginBtn.textContent = user.displayName || user.email || 'Account';
+                loginBtn.onclick = (e) => {
                     e.preventDefault();
                     this.showUserMenu();
-                });
+                };
             }
             
-            if (signupLink) {
-                signupLink.textContent = 'Sign Out';
-                signupLink.href = '#';
-                signupLink.addEventListener('click', (e) => {
+            if (signupBtn) {
+                signupBtn.textContent = 'Sign Out';
+                signupBtn.onclick = (e) => {
                     e.preventDefault();
                     this.signOut();
-                });
+                };
             }
         } else {
-            // User is signed out
-            if (loginLink) {
-                loginLink.textContent = 'Login';
-                loginLink.href = 'login.html';
+            // User is signed out - restore original hamburger functionality
+            if (loginBtn) {
+                loginBtn.textContent = 'Sign In';
+                loginBtn.onclick = null;
             }
             
-            if (signupLink) {
-                signupLink.textContent = 'Sign Up';
-                signupLink.href = 'signup.html';
+            if (signupBtn) {
+                signupBtn.textContent = 'Sign Up';
+                signupBtn.onclick = null;
             }
         }
     }
