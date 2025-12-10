@@ -111,7 +111,7 @@
                     <a href="contact.html">Contact</a>
                 </nav>
                 
-                <div class="auth-hamburger" id="authHamburger">
+                <div class="auth-hamburger" id="authHamburger" role="button" tabindex="0" aria-controls="authDropdown" aria-expanded="false">
                     <i class="fas fa-user"></i>
                     <div class="auth-dropdown" id="authDropdown">
                         <div class="auth-dropdown-content">
@@ -150,9 +150,9 @@
             <h1>Creating Unforgettable Events </h1>
             <p>Your premier partner for professional event planning and equipment rental services in Nigeria</p>
             <div class="hero-buttons">
-                <a href="event.html" class="btn" aria-label="Learn about our event services">Event Services</a>
-                <a href="contact.html" class="btn btn-secondary" aria-label="Get a quote for your event">Get a Quote</a>
-                <a href="rentals.html" class="btn btn-outline" aria-label="Explore our rental options">Rental Options</a>
+                <a href="event.html" class="btn" aria-label="Learn about our event services" style="background: #ffb300; color: #1a237e; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(255,179,0,0.3); text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#c68400'; this.style.color='#fff'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)';" onmouseout="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255,179,0,0.3)';">Event Services</a>
+                <a href="contact.html" class="btn btn-secondary" aria-label="Get a quote for your event" style="background: #ffb300; color: #1a237e; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; border: 2px solid #ffb300; cursor: pointer; box-shadow: 0 4px 12px rgba(255,179,0,0.3); text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#c68400'; this.style.color='#fff'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)'; this.style.borderColor='#c68400';" onmouseout="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255,179,0,0.3)'; this.style.borderColor='#ffb300';">Get a Quote</a>
+                <a href="rentals.html" class="btn btn-outline" aria-label="Explore our rental options" style="background: transparent; border: 2px solid #ffb300; color: #fff; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; cursor: pointer; box-shadow: none; text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)';" onmouseout="this.style.background='transparent'; this.style.color='#fff'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">Rental Options</a>
             </div>
         </div>
     </section>
@@ -379,12 +379,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
     <script src="js/firebase-config.js"></script>
-    <script src="js/auth-modal.js"></script>
     <script src="js/main.js"></script>
     <script src="js/image-optimizer.js"></script>
     <script src="js/form-handler.js"></script>
     
-    <!-- Fallback Auth Hamburger Script -->
+    <!-- Auth Hamburger Script -->
     <script>
     (function() {
         'use strict';
@@ -397,25 +396,27 @@
             const loginBtn = document.getElementById('loginBtn');
             const signupBtn = document.getElementById('signupBtn');
             
-            console.log('Auth elements found:', {
-                hamburger: !!authHamburger,
-                dropdown: !!authDropdown,
-                modal: !!authModal,
-                loginBtn: !!loginBtn,
-                signupBtn: !!signupBtn
-            });
-            
             if (authHamburger && authDropdown) {
                 authHamburger.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('Hamburger clicked');
                     authDropdown.classList.toggle('show');
+                    authHamburger.setAttribute('aria-expanded', authDropdown.classList.contains('show'));
                 });
-                
+
+                authHamburger.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        authDropdown.classList.toggle('show');
+                        authHamburger.setAttribute('aria-expanded', authDropdown.classList.contains('show'));
+                    }
+                });
+
                 document.addEventListener('click', function(e) {
                     if (!authHamburger.contains(e.target)) {
                         authDropdown.classList.remove('show');
+                        authHamburger.setAttribute('aria-expanded', 'false');
                     }
                 });
             }
@@ -423,7 +424,6 @@
             if (loginBtn && authModal) {
                 loginBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    console.log('Login clicked');
                     authModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                     authDropdown.classList.remove('show');
@@ -433,7 +433,6 @@
             if (signupBtn && authModal) {
                 signupBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    console.log('Signup clicked');
                     authModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                     authDropdown.classList.remove('show');
@@ -565,6 +564,14 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     
+    .auth-hamburger:focus {
+        outline: none;
+    }
+    
+    .auth-hamburger > i:focus {
+        outline: none;
+    }
+    
     .auth-dropdown {
         position: absolute;
         top: calc(100% + 10px);
@@ -691,8 +698,13 @@
     }
     
     .auth-tab.active {
+        color: #1a237e !important;
+        border-bottom-color: #ffb300 !important;
+    }
+    
+    .auth-tab:hover {
         color: #1a237e;
-        border-bottom-color: #1a237e;
+        border-bottom-color: #ffb300;
     }
     
     .auth-tab-content {
@@ -715,11 +727,12 @@
     .btn-google {
         width: 100%;
         padding: 15px;
-        background: #fff;
-        border: 2px solid #ddd;
-        border-radius: 8px;
+        background: #ffb300;
+        color: #1a237e;
+        border: none;
+        border-radius: 12px;
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
         display: flex;
@@ -728,11 +741,34 @@
         gap: 10px;
         margin-bottom: 20px;
         font-family: 'Poppins', sans-serif;
+        box-shadow: 0 4px 12px rgba(255,179,0,0.3);
     }
     
     .btn-google:hover {
-        border-color: #1a237e;
-        background: #f8f9ff;
+        background: #c68400;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255,179,0,0.4);
+    }
+    
+    .btn-google {
+        width: 100%;
+        padding: 15px;
+        background: #ffb300;
+        color: #1a237e;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 4px 12px rgba(255,179,0,0.3);
     }
     
     .auth-divider {
@@ -788,23 +824,29 @@
     }
     
     .btn {
-        background: #1a237e;
-        color: white;
+        background: #ffb300;
+        color: #1a237e;
         border: none;
         padding: 15px 30px;
-        border-radius: 8px;
+        border-radius: 30px;
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
-        transition: background 0.3s ease;
+        transition: all 0.3s ease;
         text-decoration: none;
         display: inline-block;
         text-align: center;
         font-family: 'Poppins', sans-serif;
+        box-shadow: 0 4px 12px rgba(255,179,0,0.3);
+        position: relative;
+        overflow: hidden;
     }
     
     .btn:hover {
-        background: #0d1142;
+        background: #c68400;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255,179,0,0.4);
     }
     
     #authMessage {
