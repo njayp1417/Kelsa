@@ -10,6 +10,7 @@ class KelsaAuth {
         document.addEventListener('DOMContentLoaded', () => {
             this.setupAuthStateListener();
             this.setupEventListeners();
+            this.setupTabSwitching();
             this.handleEmailLinkSignIn();
         });
     }
@@ -22,6 +23,29 @@ class KelsaAuth {
         });
     }
 
+    // Set up tab switching functionality
+    setupTabSwitching() {
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const tabContents = document.querySelectorAll('.auth-tab-content');
+        
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                authTabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const targetContent = document.getElementById(targetTab + 'Tab');
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+    }
+
     // Set up event listeners for buttons and forms
     setupEventListeners() {
         // Google Sign In/Up buttons
@@ -29,11 +53,17 @@ class KelsaAuth {
         const googleSignUpBtn = document.getElementById('googleSignUp');
         
         if (googleSignInBtn) {
-            googleSignInBtn.addEventListener('click', () => this.signInWithGoogle());
+            googleSignInBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.signInWithGoogle();
+            });
         }
         
         if (googleSignUpBtn) {
-            googleSignUpBtn.addEventListener('click', () => this.signInWithGoogle());
+            googleSignUpBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.signInWithGoogle();
+            });
         }
 
         // Email forms
@@ -68,9 +98,9 @@ class KelsaAuth {
             
             this.showSuccess('Successfully signed in with Google!');
             
-            // Redirect to dashboard or home page
+            // Close modal and stay on current page
             setTimeout(() => {
-                window.location.href = 'index.html';
+                this.closeModal();
             }, 1500);
             
         } catch (error) {
@@ -83,7 +113,8 @@ class KelsaAuth {
     async handleEmailSignIn(e) {
         e.preventDefault();
         
-        const email = document.getElementById('email').value.trim();
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
         
         if (!email) {
             this.showError('Please enter your email address');
@@ -91,19 +122,28 @@ class KelsaAuth {
         }
 
         try {
-            this.showLoading('Sending sign in link...');
-            
-            const actionCodeSettings = {
-                url: window.location.origin + '/login.html',
-                handleCodeInApp: true,
-            };
+            if (password) {
+                // Sign in with email and password
+                this.showLoading('Signing in...');
+                await firebase.auth().signInWithEmailAndPassword(email, password);
+                this.showSuccess('Successfully signed in!');
+                setTimeout(() => this.closeModal(), 1500);
+            } else {
+                // Send email link
+                this.showLoading('Sending sign in link...');
+                
+                const actionCodeSettings = {
+                    url: window.location.origin + window.location.pathname,
+                    handleCodeInApp: true,
+                };
 
-            await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
-            
-            // Save email for later use
-            localStorage.setItem('emailForSignIn', email);
-            
-            this.showSuccess('Sign in link sent! Check your email and click the link to sign in.');
+                await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
+                
+                // Save email for later use
+                localStorage.setItem('emailForSignIn', email);
+                
+                this.showSuccess('Sign in link sent! Check your email and click the link to sign in.');
+            }
             
         } catch (error) {
             console.error('Email sign in error:', error);
@@ -115,7 +155,7 @@ class KelsaAuth {
     async handleEmailSignUp(e) {
         e.preventDefault();
         
-        const email = document.getElementById('email').value.trim();
+        const email = document.getElementById('signupEmail').value.trim();
         
         if (!email) {
             this.showError('Please enter your email address');
@@ -126,7 +166,7 @@ class KelsaAuth {
             this.showLoading('Sending sign up link...');
             
             const actionCodeSettings = {
-                url: window.location.origin + '/signup.html',
+                url: window.location.origin + window.location.pathname,
                 handleCodeInApp: true,
             };
 
@@ -158,9 +198,9 @@ class KelsaAuth {
                         localStorage.removeItem('emailForSignIn');
                         this.showSuccess('Successfully signed in!');
                         
-                        // Redirect to home page
+                        // Close modal and stay on current page
                         setTimeout(() => {
-                            window.location.href = 'index.html';
+                            this.closeModal();
                         }, 1500);
                     })
                     .catch((error) => {
@@ -177,9 +217,9 @@ class KelsaAuth {
             await firebase.auth().signOut();
             this.showSuccess('Successfully signed out');
             
-            // Redirect to home page
+            // Update UI to show signed out state
             setTimeout(() => {
-                window.location.href = 'index.html';
+                // UI will be updated by onAuthStateChanged
             }, 1000);
             
         } catch (error) {
@@ -262,28 +302,35 @@ class KelsaAuth {
         this.showMessage(message, 'error');
     }
 
+    // Close modal helper
+    closeModal() {
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
     // Show message helper
     showMessage(message, type) {
-        const container = document.getElementById('message-container');
+        const container = document.getElementById('authMessage');
         if (!container) return;
 
-        const messageClass = type === 'success' ? 'success-message' : 
-                           type === 'error' ? 'error-message' : 'loading-message';
-        
         const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' :
                     type === 'error' ? '<i class="fas fa-exclamation-circle"></i>' :
                     '<i class="fas fa-spinner fa-spin"></i>';
 
-        container.innerHTML = `
-            <div class="${messageClass}">
-                ${icon} ${message}
-            </div>
-        `;
+        container.innerHTML = `${icon} ${message}`;
+        container.className = type;
+        container.style.display = 'block';
 
         // Clear message after 5 seconds (except loading)
         if (type !== 'loading') {
             setTimeout(() => {
-                if (container) container.innerHTML = '';
+                if (container) {
+                    container.style.display = 'none';
+                    container.className = '';
+                }
             }, 5000);
         }
     }
@@ -293,8 +340,12 @@ class KelsaAuth {
         switch (error.code) {
             case 'auth/user-not-found':
                 return 'No account found with this email address.';
+            case 'auth/wrong-password':
+                return 'Incorrect password. Please try again.';
             case 'auth/invalid-email':
                 return 'Please enter a valid email address.';
+            case 'auth/user-disabled':
+                return 'This account has been disabled.';
             case 'auth/too-many-requests':
                 return 'Too many attempts. Please try again later.';
             case 'auth/network-request-failed':
@@ -303,6 +354,10 @@ class KelsaAuth {
                 return 'Sign in was cancelled.';
             case 'auth/popup-blocked':
                 return 'Popup was blocked. Please allow popups and try again.';
+            case 'auth/email-already-in-use':
+                return 'An account with this email already exists.';
+            case 'auth/weak-password':
+                return 'Password should be at least 6 characters.';
             default:
                 return error.message || 'An error occurred. Please try again.';
         }

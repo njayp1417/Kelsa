@@ -379,6 +379,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
     <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
     <script src="js/image-optimizer.js"></script>
     <script src="js/form-handler.js"></script>
@@ -427,6 +428,22 @@
                     authModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                     authDropdown.classList.remove('show');
+                    
+                    // Switch to login tab
+                    const signupTab = document.querySelector('.auth-tab[data-tab="signup"]');
+                    const loginTab = document.querySelector('.auth-tab[data-tab="login"]');
+                    const signupContent = document.getElementById('signupTab');
+                    const loginContent = document.getElementById('loginTab');
+                    
+                    if (signupTab && loginTab && signupContent && loginContent) {
+                        // Remove active from signup
+                        signupTab.classList.remove('active');
+                        signupContent.classList.remove('active');
+                        
+                        // Add active to login
+                        loginTab.classList.add('active');
+                        loginContent.classList.add('active');
+                    }
                 });
             }
             
@@ -436,6 +453,22 @@
                     authModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                     authDropdown.classList.remove('show');
+                    
+                    // Switch to signup tab
+                    const signupTab = document.querySelector('.auth-tab[data-tab="signup"]');
+                    const loginTab = document.querySelector('.auth-tab[data-tab="login"]');
+                    const signupContent = document.getElementById('signupTab');
+                    const loginContent = document.getElementById('loginTab');
+                    
+                    if (signupTab && loginTab && signupContent && loginContent) {
+                        // Remove active from login
+                        loginTab.classList.remove('active');
+                        loginContent.classList.remove('active');
+                        
+                        // Add active to signup
+                        signupTab.classList.add('active');
+                        signupContent.classList.add('active');
+                    }
                 });
             }
             

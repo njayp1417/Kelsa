@@ -344,11 +344,13 @@ class AuthModal {
         document.getElementById('loginBtn').addEventListener('click', (e) => {
             e.preventDefault();
             this.openModal('login');
+            document.getElementById('authDropdown').classList.remove('show');
         });
 
         document.getElementById('signupBtn').addEventListener('click', (e) => {
             e.preventDefault();
             this.openModal('signup');
+            document.getElementById('authDropdown').classList.remove('show');
         });
 
         document.querySelector('.auth-close').addEventListener('click', () => {
@@ -363,17 +365,22 @@ class AuthModal {
         });
 
         // Auth hamburger dropdown
-        document.addEventListener('click', (e) => {
-            const authHamburger = document.getElementById('authHamburger');
-            const authDropdown = document.getElementById('authDropdown');
-            
-            if (authHamburger && authHamburger.contains(e.target) && !authDropdown.contains(e.target)) {
+        const authHamburger = document.getElementById('authHamburger');
+        const authDropdown = document.getElementById('authDropdown');
+        
+        if (authHamburger && authDropdown) {
+            authHamburger.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 authDropdown.classList.toggle('show');
-            } else if (authDropdown && !authHamburger.contains(e.target)) {
-                authDropdown.classList.remove('show');
-            }
-        });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!authHamburger.contains(e.target)) {
+                    authDropdown.classList.remove('show');
+                }
+            });
+        }
 
         // Sign out button
         document.addEventListener('click', (e) => {
@@ -427,14 +434,28 @@ class AuthModal {
         // Update tab buttons
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.classList.remove('active');
+            tab.style.color = '#666';
+            tab.style.borderBottomColor = 'transparent';
         });
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        
+        const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+        if (activeTab) {
+            activeTab.classList.add('active');
+            activeTab.style.color = '#1a237e';
+            activeTab.style.borderBottomColor = '#ffb300';
+        }
 
         // Update tab content
         document.querySelectorAll('.auth-tab-content').forEach(content => {
             content.classList.remove('active');
+            content.style.display = 'none';
         });
-        document.getElementById(`${tabName}Tab`).classList.add('active');
+        
+        const targetContent = document.getElementById(`${tabName}Tab`);
+        if (targetContent) {
+            targetContent.classList.add('active');
+            targetContent.style.display = 'block';
+        }
 
         this.clearMessage();
     }
