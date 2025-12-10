@@ -90,6 +90,220 @@
       gtag('js', new Date());
       gtag('config', 'G-T5H6Q75N2P');
     </script>
+    
+    <!-- Firebase Authentication - Inline for Guaranteed Loading -->
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCCng5B1NsrAugglmy5au8b8tB2NAEp2lA",
+        authDomain: "kelsa-events.firebaseapp.com",
+        projectId: "kelsa-events",
+        storageBucket: "kelsa-events.firebasestorage.app",
+        messagingSenderId: "137881039928",
+        appId: "1:137881039928:web:701eb84377311f84c9e2cd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    // Global auth functions
+    window.handleGoogleSignIn = async function() {
+        try {
+            showAuthMessage('Signing in with Google...', 'loading');
+            const provider = new GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            await signInWithPopup(auth, provider);
+            showAuthMessage('Successfully signed in!', 'success');
+            setTimeout(() => closeAuthModal(), 1500);
+        } catch (error) {
+            console.error('Google sign in error:', error);
+            showAuthMessage(error.message || 'Sign in failed', 'error');
+        }
+    };
+    
+    window.handleEmailSignIn = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        if (!email) {
+            showAuthMessage('Please enter your email address', 'error');
+            return;
+        }
+        try {
+            showAuthMessage('Sending sign in link...', 'loading');
+            const actionCodeSettings = {
+                url: window.location.origin + window.location.pathname,
+                handleCodeInApp: true,
+            };
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            localStorage.setItem('emailForSignIn', email);
+            showAuthMessage('Sign in link sent! Check your email.', 'success');
+        } catch (error) {
+            console.error('Email sign in error:', error);
+            showAuthMessage(error.message || 'Sign in failed', 'error');
+        }
+    };
+    
+    window.handleEmailSignUp = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('signupEmail').value.trim();
+        if (!email) {
+            showAuthMessage('Please enter your email address', 'error');
+            return;
+        }
+        try {
+            showAuthMessage('Sending sign up link...', 'loading');
+            const actionCodeSettings = {
+                url: window.location.origin + window.location.pathname,
+                handleCodeInApp: true,
+            };
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            localStorage.setItem('emailForSignIn', email);
+            showAuthMessage('Sign up link sent! Check your email.', 'success');
+        } catch (error) {
+            console.error('Email sign up error:', error);
+            showAuthMessage(error.message || 'Sign up failed', 'error');
+        }
+    };
+    
+    window.showAuthMessage = function(message, type) {
+        const container = document.getElementById('authMessage');
+        if (!container) return;
+        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' :
+                    type === 'error' ? '<i class="fas fa-exclamation-circle"></i>' :
+                    '<i class="fas fa-spinner fa-spin"></i>';
+        container.innerHTML = `${icon} ${message}`;
+        container.style.display = 'block';
+        container.style.background = type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1';
+        container.style.color = type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460';
+        container.style.border = `1px solid ${type === 'success' ? '#c3e6cb' : type === 'error' ? '#f5c6cb' : '#bee5eb'}`;
+        if (type !== 'loading') {
+            setTimeout(() => { if (container) container.style.display = 'none'; }, 5000);
+        }
+    };
+    
+    function closeAuthModal() {
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+    
+    // Initialize when DOM loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const authHamburger = document.getElementById('authHamburger');
+        const authDropdown = document.getElementById('authDropdown');
+        
+        if (authHamburger && authDropdown) {
+            authHamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isVisible = authDropdown.style.opacity === '1';
+                if (isVisible) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                } else {
+                    authDropdown.style.opacity = '1';
+                    authDropdown.style.visibility = 'visible';
+                    authDropdown.style.transform = 'translateY(0)';
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!authHamburger.contains(e.target) && !authDropdown.contains(e.target)) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                }
+            });
+        }
+    });
+    
+    // Auth state listener
+    onAuthStateChanged(auth, user => {
+        const authDropdown = document.getElementById('authDropdown');
+        if (!authDropdown) return;
+        
+        if (user) {
+            authDropdown.innerHTML = `
+                <div style="padding: 15px; border-bottom: 1px solid #eee; background: #f8f9fc;">
+                    <strong style="color: #1a237e;">${user.displayName || "User"}</strong><br>
+                    <small style="color: #757575;">${user.email}</small>
+                </div>
+                <a href="#" onclick="signOut(getAuth()); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #d32f2f; text-decoration: none;" 
+                   onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </a>
+            `;
+        } else {
+            authDropdown.innerHTML = `
+                <a href="#" onclick="openAuthModal('login'); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.05);" 
+                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </a>
+                <a href="#" onclick="openAuthModal('signup'); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none;" 
+                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            `;
+        }
+    });
+    
+    // Make auth available globally
+    window.firebaseAuth = auth;
+    </script>
+    
+    <script>
+    function openAuthModal(tab = 'login') {
+        const authModal = document.getElementById('authModal');
+        const authDropdown = document.getElementById('authDropdown');
+        if (authModal) {
+            authModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            switchAuthTab(tab);
+        }
+        if (authDropdown) {
+            authDropdown.style.opacity = '0';
+            authDropdown.style.visibility = 'hidden';
+            authDropdown.style.transform = 'translateY(-10px)';
+        }
+    }
+    
+    function switchAuthTab(tabName) {
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        
+        authTabs.forEach(tab => {
+            if (tab.getAttribute('data-tab') === tabName) {
+                tab.style.background = 'white';
+                tab.style.color = '#1a237e';
+                tab.style.borderBottom = '3px solid #1a237e';
+            } else {
+                tab.style.background = 'none';
+                tab.style.color = '#757575';
+                tab.style.borderBottom = 'none';
+            }
+        });
+        
+        if (loginTab && signupTab) {
+            if (tabName === 'login') {
+                loginTab.style.display = 'block';
+                signupTab.style.display = 'none';
+            } else {
+                loginTab.style.display = 'none';
+                signupTab.style.display = 'block';
+            }
+        }
+    }
+    </script>
 </head>
 <body class="index-page">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -345,7 +559,7 @@
     <!-- Inline Authentication Modal -->
     <div id="authModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px);">
         <div style="background-color: white; margin: 5% auto; padding: 0; border-radius: 16px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
-            <span style="position: absolute; top: 15px; right: 20px; color: #757575; font-size: 28px; font-weight: bold; cursor: pointer;" onclick="document.getElementById('authModal').style.display='none'; document.body.style.overflow='auto';">&times;</span>
+<span class="auth-close" style="position: absolute; top: 15px; right: 20px; color: #757575; font-size: 28px; font-weight: bold; cursor: pointer;" onclick="document.getElementById('authModal').style.display='none'; document.body.style.overflow='auto';">&times;</span>
             
             <div style="display: flex; border-bottom: 1px solid #eee; background: #f8f9fc; border-radius: 16px 16px 0 0;">
                 <button class="auth-tab active" data-tab="login" style="flex: 1; padding: 16px 12px; background: white; border: none; cursor: pointer; font-size: 1rem; font-weight: 600; color: #1a237e; border-bottom: 3px solid #1a237e;" onclick="switchAuthTab('login')">Sign In</button>
@@ -390,8 +604,7 @@
 
 
     
-    <!-- Shared Authentication Module -->
-    <script src="js/shared-auth.js"></script>
+
     
     <script src="js/main.js"></script>
     <script src="js/image-optimizer.js"></script>
