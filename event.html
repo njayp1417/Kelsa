@@ -175,7 +175,7 @@
                     <strong style="color: #1a237e;">${user.displayName || "User"}</strong><br>
                     <small style="color: #757575;">${user.email}</small>
                 </div>
-                <a href="#" onclick="handleSignOut(); return false;"
+                <a href="#" onclick="handleSignOut(event)"
                    style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #d32f2f; text-decoration: none;" 
                    onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">
                     <i class="fas fa-sign-out-alt"></i> Sign Out
@@ -197,7 +197,8 @@
         }
     });
     
-    window.handleSignOut = async function() {
+    window.handleSignOut = async function(event) {
+        if (event) event.preventDefault();
         try {
             const authDropdown = document.getElementById('authDropdown');
             if (authDropdown) {
