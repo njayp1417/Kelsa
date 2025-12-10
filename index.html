@@ -610,10 +610,10 @@
             }
         }
     }
-
     </script>
+
     
-    <!-- Inline Hamburger Menu Script -->
+    <!-- Hamburger Menu Script -->
     <script>
     (function() {
         'use strict';
@@ -624,7 +624,6 @@
             
             if (!authHamburger || !authDropdown) return;
             
-            // Toggle dropdown on click
             authHamburger.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -632,71 +631,35 @@
                 const isVisible = authDropdown.style.opacity === '1';
                 
                 if (isVisible) {
-                    // Hide dropdown
                     authDropdown.style.opacity = '0';
                     authDropdown.style.visibility = 'hidden';
                     authDropdown.style.transform = 'translateY(-10px)';
-                    authHamburger.setAttribute('aria-expanded', 'false');
                 } else {
-                    // Show dropdown
                     authDropdown.style.opacity = '1';
                     authDropdown.style.visibility = 'visible';
                     authDropdown.style.transform = 'translateY(0)';
-                    authHamburger.setAttribute('aria-expanded', 'true');
                 }
             });
             
-            // Close dropdown when clicking outside
             document.addEventListener('click', function(e) {
                 if (!authHamburger.contains(e.target)) {
                     authDropdown.style.opacity = '0';
                     authDropdown.style.visibility = 'hidden';
                     authDropdown.style.transform = 'translateY(-10px)';
-                    authHamburger.setAttribute('aria-expanded', 'false');
                 }
             });
             
-            // Keyboard support
-            authHamburger.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    authHamburger.click();
-                }
-            });
-            
-            // Add modal triggers to login and signup buttons
             const loginBtn = document.getElementById('loginBtn');
             const signupBtn = document.getElementById('signupBtn');
             
             if (loginBtn) {
                 loginBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    // Hide dropdown first
                     authDropdown.style.opacity = '0';
                     authDropdown.style.visibility = 'hidden';
-                    authDropdown.style.transform = 'translateY(-10px)';
-                    
-                    // Show modal and switch to login tab
-                    const authModal = document.getElementById('authModal');
-                    if (authModal) {
-                        authModal.style.display = 'block';
-                        document.body.style.overflow = 'hidden';
-                        
-                        // Switch to login tab
-                        setTimeout(() => {
-                            const loginTab = document.querySelector('.auth-tab[data-tab="login"]');
-                            const signupTab = document.querySelector('.auth-tab[data-tab="signup"]');
-                            const loginContent = document.getElementById('loginTab');
-                            const signupContent = document.getElementById('signupTab');
-                            
-                            if (loginTab && signupTab && loginContent && signupContent) {
-                                signupTab.classList.remove('active');
-                                signupContent.classList.remove('active');
-                                loginTab.classList.add('active');
-                                loginContent.classList.add('active');
-                            }
-                        }, 100);
-                    }
+                    document.getElementById('authModal').style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    switchAuthTab('login');
                 });
             }
             
@@ -705,8 +668,6 @@
                     e.preventDefault();
                     authDropdown.style.opacity = '0';
                     authDropdown.style.visibility = 'hidden';
-                    authDropdown.style.transform = 'translateY(-10px)';
-                    
                     document.getElementById('authModal').style.display = 'block';
                     document.body.style.overflow = 'hidden';
                     switchAuthTab('signup');
@@ -714,119 +675,6 @@
             }
         }
         
-        window.switchAuthTab = function(tabName) {
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.style.background = 'none';
-                tab.style.color = '#757575';
-                tab.style.borderBottom = 'none';
-            });
-            
-            document.getElementById('loginTab').style.display = 'none';
-            document.getElementById('signupTab').style.display = 'none';
-            
-            const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
-            if (activeTab) {
-                activeTab.style.background = 'white';
-                activeTab.style.color = '#1a237e';
-                activeTab.style.borderBottom = '3px solid #1a237e';
-            }
-            
-            document.getElementById(tabName + 'Tab').style.display = 'block';
-        };
-        
-        window.showAuthMessage = function(message, type) {
-            const messageEl = document.getElementById('authMessage');
-            messageEl.textContent = message;
-            messageEl.style.display = 'block';
-            messageEl.style.background = 'rgba(211, 47, 47, 0.1)';
-            messageEl.style.color = '#d32f2f';
-            messageEl.style.border = '1px solid rgba(211, 47, 47, 0.2)';
-            setTimeout(() => messageEl.style.display = 'none', 3000);
-        };
-        
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initHamburger);
-        } else {
-            initHamburger();
-        }
-    })();
-    </script>
-</body>
-</html>r('click', function(e) {
-                    e.preventDefault();
-                    authDropdown.style.opacity = '0';
-                    authDropdown.style.visibility = 'hidden';
-                    authDropdown.style.transform = 'translateY(-10px)';
-                    
-                    document.getElementById('authModal').style.display = 'block';
-                    document.body.style.overflow = 'hidden';
-                    switchAuthTab('signup');
-                });
-            }
-        }
-        
-        window.switchAuthTab = function(tabName) {
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.style.background = 'none';
-                tab.style.color = '#757575';
-                tab.style.borderBottom = 'none';
-            });
-            
-            document.getElementById('loginTab').style.display = 'none';
-            document.getElementById('signupTab').style.display = 'none';
-            
-            const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
-            if (activeTab) {
-                activeTab.style.background = 'white';
-                activeTab.style.color = '#1a237e';
-                activeTab.style.borderBottom = '3px solid #1a237e';
-            }
-            
-            document.getElementById(tabName + 'Tab').style.display = 'block';
-        };
-        
-        window.showAuthMessage = function(message, type) {
-            const messageEl = document.getElementById('authMessage');
-            messageEl.textContent = message;
-            messageEl.style.display = 'block';
-            messageEl.style.background = 'rgba(211, 47, 47, 0.1)';
-            messageEl.style.color = '#d32f2f';
-            messageEl.style.border = '1px solid rgba(211, 47, 47, 0.2)';
-            setTimeout(() => messageEl.style.display = 'none', 3000);
-        };r('click', function(e) {
-                    e.preventDefault();
-                    // Hide dropdown first
-                    authDropdown.style.opacity = '0';
-                    authDropdown.style.visibility = 'hidden';
-                    authDropdown.style.transform = 'translateY(-10px)';
-                    
-                    // Show modal and switch to signup tab
-                    const authModal = document.getElementById('authModal');
-                    if (authModal) {
-                        authModal.style.display = 'block';
-                        document.body.style.overflow = 'hidden';
-                        
-                        // Switch to signup tab
-                        setTimeout(() => {
-                            const loginTab = document.querySelector('.auth-tab[data-tab="login"]');
-                            const signupTab = document.querySelector('.auth-tab[data-tab="signup"]');
-                            const loginContent = document.getElementById('loginTab');
-                            const signupContent = document.getElementById('signupTab');
-                            
-                            if (loginTab && signupTab && loginContent && signupContent) {
-                                loginTab.classList.remove('active');
-                                loginContent.classList.remove('active');
-                                signupTab.classList.add('active');
-                                signupContent.classList.add('active');
-                            }
-                        }, 100);
-                    }
-                });
-            }
-        }
-        
-        // Initialize when DOM is ready
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initHamburger);
         } else {
