@@ -1,0 +1,253 @@
+// Invoice Form Handler
+class InvoiceManager {
+    constructor() {
+        this.initializeEventListeners();
+        this.addInitialItems();
+    }
+
+    initializeEventListeners() {
+        const form = document.getElementById('invoiceForm');
+        const addItemBtn = document.getElementById('addItem');
+        const previewBtn = document.getElementById('previewBtn');
+
+        form.addEventListener('submit', (e) => this.handleSubmit(e));
+        addItemBtn.addEventListener('click', () => this.addItem());
+        previewBtn.addEventListener('click', () => this.previewInvoice());
+
+        // Auto-calculate amounts
+        document.addEventListener('input', (e) => {
+            if (e.target.name === 'qty' || e.target.name === 'unitCost') {
+                this.calculateRowAmount(e.target);
+            }
+            // Only recalculate total when delivery or item amounts change. Balance is independent.
+            if (e.target.name === 'delivery') {
+                this.calculateTotal();
+            }
+        });
+
+        // Format numeric inputs with commas for better UX (balance field etc.)
+        document.addEventListener('focus', (e) => {
+            if (e.target.classList && e.target.classList.contains('formatted-number')) {
+                // On focus, show raw digits for easy editing
+                const raw = this.parseNumberFromFormatted(e.target.value);
+                e.target.value = raw === 0 ? '' : String(raw);
+            }
+        }, true);
+
+        document.addEventListener('blur', (e) => {
+            if (e.target.classList && e.target.classList.contains('formatted-number')) {
+                const num = parseFloat(e.target.value) || 0;
+                e.target.value = this.formatNumber(num);
+            }
+        }, true);
+
+        // Remove item functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-item')) {
+                this.removeItem(e.target);
+            }
+        });
+    }
+
+    addInitialItems() {
+        const defaultItems = [
+            { name: 'Chiavari Chairs', unitCost: null },
+            { name: 'Banquet Circle Table', unitCost: null },
+            { name: 'Banquet Rectangular Table', unitCost: null },
+            { name: 'Plastic Chairs', unitCost: null },
+            { name: 'Plastic Tables', unitCost: null },
+            { name: 'Glass Cup', unitCost: null },
+            { name: 'Wine Cup', unitCost: null },
+            { name: 'Champagne Cup', unitCost: null },
+            { name: 'Saki Pot & Spoon', unitCost: null },
+            { name: 'Cutleries', unitCost: null },
+            { name: 'Carpet Rug', unitCost: null },
+            { name: 'Breakable Plate', unitCost: null }
+        ];
+
+        defaultItems.forEach((item, index) => {
+            if (index > 0) this.addItem();
+            const rows = document.querySelectorAll('.item-row');
+            const lastRow = rows[rows.length - 1];
+            lastRow.querySelector('input[name="description"]').value = item.name;
+            if (item.unitCost) {
+                lastRow.querySelector('input[name="unitCost"]').value = item.unitCost;
+            }
+        });
+    }
+
+    addItem() {
+        const container = document.getElementById('itemsContainer');
+        const itemRow = document.createElement('div');
+        itemRow.className = 'item-row';
+        itemRow.innerHTML = `
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" name="description" placeholder="Item description">
+            </div>
+            <div class="form-group">
+                <label>Qty</label>
+                <input type="number" name="qty" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Unit Cost (₦)</label>
+                <input type="number" name="unitCost" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Amount (₦)</label>
+                <input type="number" name="amount" placeholder="0" readonly>
+            </div>
+            <button type="button" class="remove-item">×</button>
+        `;
+        container.appendChild(itemRow);
+    }
+
+    removeItem(button) {
+        const itemRow = button.closest('.item-row');
+        const container = document.getElementById('itemsContainer');
+        if (container.children.length > 1) {
+            itemRow.remove();
+            this.calculateTotal();
+        }
+    }
+
+    calculateRowAmount(input) {
+        const row = input.closest('.item-row');
+        const qty = parseFloat(row.querySelector('input[name="qty"]').value) || 0;
+        const unitCost = parseFloat(row.querySelector('input[name="unitCost"]').value) || 0;
+        const amountField = row.querySelector('input[name="amount"]');
+        
+        const amount = qty * unitCost;
+        amountField.value = amount > 0 ? amount : '';
+        
+        this.calculateTotal();
+    }
+
+    calculateTotal() {
+        const amounts = Array.from(document.querySelectorAll('input[name="amount"]'))
+            .map(input => parseFloat(input.value) || 0);
+        
+        const subtotal = amounts.reduce((sum, amount) => sum + amount, 0);
+        // Read delivery (shipping/delivery) and include it in the total
+        const deliveryEl = document.getElementById('delivery');
+        const delivery = deliveryEl ? this.parseNumberFromFormatted(deliveryEl.value) : 0;
+
+        // Total represents the invoice total (subtotal + delivery). Balance is a separate field
+        // that represents money still owed and should NOT be added to the invoice total.
+        const total = subtotal + delivery;
+    document.getElementById('total').value = total;
+    }
+
+    formatCurrency(amount) {
+        return `₦${amount.toLocaleString()}`;
+    }
+    
+    // Format number with commas (no currency symbol)
+    formatNumber(amount) {
+        if (!Number.isFinite(amount)) return '0';
+        return amount.toLocaleString();
+    }
+    
+    // Parse a formatted number string like "40,000" or "₦40,000" into a Number
+    parseNumberFromFormatted(str) {
+        if (typeof str === 'number') return str;
+        if (!str) return 0;
+        const cleaned = String(str).replace(/[^0-9.-]+/g, '');
+        const num = parseFloat(cleaned);
+        return Number.isFinite(num) ? num : 0;
+    }
+
+    collectFormData() {
+        const customerName = document.getElementById('customerName').value;
+        // Read delivery (formatted) and balance correctly
+        const deliveryEl = document.getElementById('delivery');
+        const delivery = deliveryEl ? this.parseNumberFromFormatted(deliveryEl.value) : 0;
+        const balanceEl = document.getElementById('balance');
+        const balance = balanceEl ? this.parseNumberFromFormatted(balanceEl.value) : 0;
+        const total = parseFloat(document.getElementById('total').value) || 0;
+
+        const items = Array.from(document.querySelectorAll('.item-row')).map(row => {
+            const description = row.querySelector('input[name="description"]').value;
+            const qty = parseFloat(row.querySelector('input[name="qty"]').value) || null;
+            const unitCost = parseFloat(row.querySelector('input[name="unitCost"]').value) || null;
+            const amount = parseFloat(row.querySelector('input[name="amount"]').value) || null;
+
+            return { description, qty, unitCost, amount };
+        }).filter(item => item.description.trim() !== '');
+
+        return {
+            brand: {
+                name: "KELSA RENTAL",
+                logoUrl: ""
+            },
+            invoice: {
+                title: "INVOICE",
+                customerName,
+                currency: "NGN",
+                currencySymbol: "₦",
+                items,
+                delivery,
+                balance,
+                total
+            },
+            contact: {
+                phone: "09134636775",
+                email: "kelsarentalsevent@gmail.com",
+                addressLines: [
+                    "Shop B2 Beaufort Court Estate Lugbe",
+                    "Abuja."
+                ]
+            }
+        };
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const data = this.collectFormData();
+        
+        if (!data.invoice.customerName.trim()) {
+            alert('Please enter customer name');
+            return;
+        }
+
+        if (data.invoice.items.length === 0) {
+            alert('Please add at least one item');
+            return;
+        }
+
+        this.generateInvoice(data);
+    }
+
+    previewInvoice() {
+        const data = this.collectFormData();
+        
+        if (!data.invoice.customerName.trim()) {
+            alert('Please enter customer name to preview');
+            return;
+        }
+
+        this.generateInvoice(data, true);
+    }
+
+    generateInvoice(data, isPreview = false) {
+        // Store data in localStorage and sessionStorage for backup
+        localStorage.setItem('invoiceData', JSON.stringify(data));
+        sessionStorage.setItem('invoiceData', JSON.stringify(data));
+        
+        // Also encode data in URL as backup
+        const encodedData = encodeURIComponent(JSON.stringify(data));
+        const invoiceUrl = `invoice.html?data=${encodedData}`;
+        
+        // Open invoice in new window/tab
+        const invoiceWindow = window.open(invoiceUrl, '_blank');
+        
+        if (!invoiceWindow) {
+            alert('Please allow popups to generate the invoice');
+        }
+    }
+}
+
+// Initialize the invoice manager when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new InvoiceManager();
+});

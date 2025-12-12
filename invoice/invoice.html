@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https:; img-src 'self' data: https:; font-src 'self' https: data:;">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Kelsa Rental Invoice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Inter:wght@400;500;600;700&family=Georgia:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @page { size: A4 portrait; margin: 0; }
+        * { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --navy-900: #0B1445; --gold-600: #D8A52A; --gray-050: #F2F1F5; --gray-200: #E6E4EA; --text-900: #111111; --text-invert: #FFFFFF; }
+        body { font-family: "Inter", "Helvetica Neue", Arial, sans-serif; font-size: 16px; line-height: 1.4; color: var(--text-900); background: #FFFFFF; }
+    /* Use real A4 dimensions so html2pdf captures correct proportions */
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto; background: white; position: relative; overflow: hidden; }
+    /* Avoid vw/vh for print/PDF capture — use percent-based width */
+    .hero { position: relative; height: 200px; width: 100%; overflow: hidden; background: var(--navy-900); }
+        .hero__bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--navy-900); clip-path: polygon(0 0, 100% 0, 100% 70%, 85% 100%, 0 70%); z-index: 1; }
+        .hero__gold { position: absolute; bottom: 0; left: 0; width: 100%; height: 30%; background: var(--gold-600); clip-path: polygon(0 100%, 85% 0, 100% 30%, 100% 100%); z-index: 2; }
+        .hero__title { position: absolute; left: 48px; top: 50%; transform: translateY(-50%); font-family: "Montserrat", "Poppins", "Arial Black", Arial, sans-serif; font-size: 56px; font-weight: 900; color: var(--text-invert); letter-spacing: 0.5px; text-transform: uppercase; z-index: 10; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); }
+        .hero__brand { position: absolute; right: 48px; top: 50%; transform: translateY(-50%); text-align: right; z-index: 10; }
+        .brand__logo { width: 130px; height: 130px; border-radius: 50%; margin: 0 0 8px auto; object-fit: cover; object-position: center; transform: scale(1.1); border: 5px solid var(--gold-600); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(216, 165, 42, 0.3); }
+        .brand__name { font-family: "Montserrat", Arial, sans-serif; font-size: 18px; font-weight: 700; color: var(--text-invert); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
+        .recipient { margin: 30px 48px 24px; text-align: center; }
+        .recipient__name { font-family: "Georgia", "Times New Roman", serif; font-size: 36px; font-weight: 700; color: var(--text-900); }
+        .items { margin: 0 48px 24px; }
+        .items__table { width: 100%; border-collapse: collapse; margin: 0 auto; }
+        .items__table thead tr { background: var(--navy-900); }
+        .items__table th { font-family: "Montserrat", Arial, sans-serif; font-size: 16px; font-weight: 700; color: var(--text-invert); text-transform: uppercase; padding: 15px; text-align: left; }
+        .items__table th:nth-child(1) { width: 58%; }
+        .items__table th:nth-child(2) { width: 12%; text-align: center; }
+        .items__table th:nth-child(3) { width: 15%; }
+        .items__table th:nth-child(4) { width: 15%; }
+        .items__table tbody tr { min-height: 42px; }
+        .items__table tbody tr:nth-child(even) { background: var(--gray-050); }
+        .items__table td { padding: 13px 15px; font-size: 16px; font-weight: 400; border-bottom: 1px solid #eee; }
+        .items__table td:nth-child(2) { text-align: center; }
+        .summary { margin: 30px 48px 40px; display: flex; justify-content: flex-end; }
+        .summary__table { width: 40%; border-collapse: collapse; }
+        .summary__table td { padding: 14px 16px; font-size: 16px; height: 48px; }
+        .summary__table td:first-child { font-weight: 600; width: 45%; }
+        .summary__table td:last-child { width: 55%; text-align: left; }
+        .row--tax { background: white; }
+        .row--balance { background: var(--gray-200); }
+        .row--total { background: var(--navy-900); color: var(--text-invert); }
+        .row--total td:first-child { font-weight: 800; text-transform: uppercase; }
+        .row--total td:last-child { font-weight: 700; }
+        .footer { margin: 48px 48px 0; position: relative; display: flex; justify-content: space-between; align-items: flex-start; min-height: 200px; }
+        .contact h3 { font-family: "Montserrat", Arial, sans-serif; font-size: 18px; font-weight: 800; text-transform: uppercase; color: var(--text-900); margin-bottom: 20px; }
+        .contact ul { list-style: none; }
+        .contact li { display: flex; align-items: flex-start; margin-bottom: 12px; font-size: 16px; font-weight: 500; }
+        .ico { width: 34px; height: 34px; background: var(--navy-900); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; margin-top: 2px; }
+        .gratitude { text-align: right; margin-top: 5px; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+        .thanks { font-family: "Montserrat", Arial, sans-serif; font-size: 32px; font-weight: 900; color: var(--navy-900); margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .signature-area { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 200px; padding: 15px; border: 2px solid var(--navy-900); border-radius: 8px; background: rgba(11, 20, 69, 0.02); }
+        .sig { font-size: 16px; font-weight: 700; color: var(--navy-900); text-transform: uppercase; letter-spacing: 2px; margin: 0; text-align: center; }
+        .signature { width: 160px; height: 70px; object-fit: contain; filter: contrast(1.4) brightness(0.7) saturate(0); background: transparent; margin: 10px 0; border-bottom: 2px solid var(--navy-900); padding-bottom: 5px; }
+        .print-controls { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 1000; }
+        .btn-download, .btn-print, .btn-close { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 14px; }
+        .btn-download { background: #27ae60; color: white; }
+        .btn-print { background: var(--navy-900); color: white; }
+        .btn-close { background: var(--gold-600); color: white; }
+        @page { size: A4 portrait; margin: 0; }
+
+        @media print {
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Hide screen-only buttons */
+            .print-controls {
+                display: none !important;
+            }
+
+            /* Expand layout to full page */
+            .page {
+                width: 100%;
+                margin: 0 auto;
+                box-shadow: none;
+                transform: none;
+            }
+
+            /* Keep sections together on one page */
+            .hero, .recipient, .items, .summary, .footer {
+                page-break-inside: avoid;
+            }
+
+            /* Ensure content is visible edge-to-edge */
+            * {
+                overflow: visible !important;
+            }
+
+            /* When generating PDF we add a 'print-version' class to the clone to hide UI */
+            .print-version .print-controls { display: none !important; }
+        }
+
+        /* Balance input styling: looks like plain text but is editable */
+        .balance-input {
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            color: var(--text-900);
+        }
+        .balance-input:focus { outline: none; }
+        @media print {
+            .balance-input { border: none; background: transparent; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <div class="hero__bg"></div>
+            <div class="hero__gold"></div>
+            <h1 class="hero__title">INVOICE</h1>
+            <div class="hero__brand">
+                <img src="invoice-logo - Copy.webp" alt="Kelsa Rental Logo" class="brand__logo">
+                <div class="brand__name">KELSA RENTAL</div>
+            </div>
+        </header>
+
+        <section class="recipient">
+            <h2 class="recipient__name" id="customerName">Jessica Adagnai</h2>
+        </section>
+
+        <section class="items">
+            <table class="items__table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Cost</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsTableBody">
+                    <!-- Items will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <section class="summary">
+            <table class="summary__table">
+                <tbody>
+                    <tr class="row--tax">
+                        <td>Delivery</td>
+                        <td id="deliveryAmount">₦0</td>
+                    </tr>
+                    <tr class="row--balance">
+                        <td>Balance</td>
+                        <td id="balanceAmount">₦145,000</td>
+                    </tr>
+                    <tr class="row--total">
+                        <td>TOTAL</td>
+                        <td id="totalAmount">₦200,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer class="footer">
+            <div class="contact">
+                <h3>CONTACT US</h3>
+                <ul>
+                    <li>
+                        <span class="ico phone">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                        </span>
+                        09134636775 / 08025071778
+                    </li>
+                    <li>
+                        <span class="ico mail">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </span>
+                        kelsarentalsevent@gmail.com
+                    </li>
+                    <li>
+                        <span class="ico pin">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </span>
+                        Shop B2 Beaufort Court Estate Lugbe<br/>Abuja.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="gratitude">
+                <div class="thanks">Thank You!</div>
+                <div class="signature-area">
+                    <div class="sig">Manager</div>
+                    <img src="signature.webp" alt="Manager Signature" class="signature">
+                </div>
+            </div>
+
+            <div class="footer__gold"></div>
+            <div class="footer__navy"></div>
+            <div class="footer__geometric"></div>
+        </footer>
+    </div>
+
+    <div class="print-controls">
+        <button onclick="downloadPDF()" class="btn-download">Download PDF</button>
+        <button onclick="window.print()" class="btn-print">Print Invoice</button>
+        <button onclick="window.close()" class="btn-close">Close</button>
+    </div>
+
+    <script src="invoice-script.js"></script>
+    <!-- html2pdf for generating clean PDFs without browser headers/footers -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        async function downloadPDF() {
+            const invoice = document.querySelector('.page');
+            if (!invoice) return alert('Invoice element not found');
+
+            // wait for fonts and images to settle
+            if (document.fonts && document.fonts.ready) {
+                try { await document.fonts.ready; } catch (e) { /* ignore */ }
+            }
+            await new Promise(r => setTimeout(r, 500));
+
+            const opt = {
+                margin:       0,
+                filename:     'Kelsa_Rental_Invoice.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Use a clone to avoid altering the live DOM (and to ensure we can apply a print-version class)
+            const clone = invoice.cloneNode(true);
+            clone.classList.add('print-version');
+            const wrapper = document.createElement('div');
+            wrapper.style.background = '#fff';
+            wrapper.appendChild(clone);
+
+            document.body.appendChild(wrapper);
+            try {
+                await html2pdf().set(opt).from(wrapper).save();
+            } catch (err) {
+                console.error('PDF generation failed', err);
+                alert('Failed to generate PDF. See console for details.');
+            } finally {
+                if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
+            }
+        }
+    </script>
+</body>
+</html>

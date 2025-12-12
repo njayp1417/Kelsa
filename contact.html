@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, minimum-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Contact Kelsa Events for all your event planning and rental needs. Get in touch with our team to plan your perfect event.">
+    <title>Contact Us - Kelsa Events</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mobile.css" media="(max-width: 768px)">
+    <link rel="stylesheet" href="css/form-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a237e">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5H6Q75N2P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T5H6Q75N2P');
+    </script>
+    
+    <!-- Firebase Authentication - Inline for Guaranteed Loading -->
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCCng5B1NsrAugglmy5au8b8tB2NAEp2lA",
+        authDomain: "kelsa-events.firebaseapp.com",
+        projectId: "kelsa-events",
+        storageBucket: "kelsa-events.firebasestorage.app",
+        messagingSenderId: "137881039928",
+        appId: "1:137881039928:web:701eb84377311f84c9e2cd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    // Global auth functions
+    window.handleGoogleSignIn = async function() {
+        try {
+            showAuthMessage('Signing in with Google...', 'loading');
+            const provider = new GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            await signInWithPopup(auth, provider);
+            showAuthMessage('Successfully signed in!', 'success');
+            setTimeout(() => closeAuthModal(), 1500);
+        } catch (error) {
+            console.error('Google sign in error:', error);
+            showAuthMessage(error.message || 'Sign in failed', 'error');
+        }
+    };
+    
+    window.handleEmailSignIn = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        if (!email) {
+            showAuthMessage('Please enter your email address', 'error');
+            return;
+        }
+        try {
+            showAuthMessage('Sending sign in link...', 'loading');
+            const actionCodeSettings = {
+                url: window.location.origin + window.location.pathname,
+                handleCodeInApp: true,
+            };
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            localStorage.setItem('emailForSignIn', email);
+            showAuthMessage('Sign in link sent! Check your email.', 'success');
+        } catch (error) {
+            console.error('Email sign in error:', error);
+            showAuthMessage(error.message || 'Sign in failed', 'error');
+        }
+    };
+    
+    window.handleEmailSignUp = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('signupEmail').value.trim();
+        if (!email) {
+            showAuthMessage('Please enter your email address', 'error');
+            return;
+        }
+        try {
+            showAuthMessage('Sending sign up link...', 'loading');
+            const actionCodeSettings = {
+                url: window.location.origin + window.location.pathname,
+                handleCodeInApp: true,
+            };
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            localStorage.setItem('emailForSignIn', email);
+            showAuthMessage('Sign up link sent! Check your email.', 'success');
+        } catch (error) {
+            console.error('Email sign up error:', error);
+            showAuthMessage(error.message || 'Sign up failed', 'error');
+        }
+    };
+    
+    window.showAuthMessage = function(message, type) {
+        const container = document.getElementById('authMessage');
+        if (!container) return;
+        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' :
+                    type === 'error' ? '<i class="fas fa-exclamation-circle"></i>' :
+                    '<i class="fas fa-spinner fa-spin"></i>';
+        container.innerHTML = `${icon} ${message}`;
+        container.style.display = 'block';
+        container.style.background = type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1';
+        container.style.color = type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460';
+        container.style.border = `1px solid ${type === 'success' ? '#c3e6cb' : type === 'error' ? '#f5c6cb' : '#bee5eb'}`;
+        if (type !== 'loading') {
+            setTimeout(() => { if (container) container.style.display = 'none'; }, 5000);
+        }
+    };
+    
+    function closeAuthModal() {
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const authHamburger = document.getElementById('authHamburger');
+        const authDropdown = document.getElementById('authDropdown');
+        
+        if (authHamburger && authDropdown) {
+            authHamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isVisible = authDropdown.style.opacity === '1';
+                if (isVisible) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                } else {
+                    authDropdown.style.opacity = '1';
+                    authDropdown.style.visibility = 'visible';
+                    authDropdown.style.transform = 'translateY(0)';
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!authHamburger.contains(e.target) && !authDropdown.contains(e.target)) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                }
+            });
+        }
+    });
+    
+    onAuthStateChanged(auth, user => {
+        const authDropdown = document.getElementById('authDropdown');
+        if (!authDropdown) return;
+        
+        if (user) {
+            authDropdown.innerHTML = `
+                <div style="padding: 15px; border-bottom: 1px solid #eee; background: #f8f9fc;">
+                    <strong style="color: #1a237e;">${user.displayName || "User"}</strong><br>
+                    <small style="color: #757575;">${user.email}</small>
+                </div>
+                <a href="#" onclick="handleSignOut(event)"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #d32f2f; text-decoration: none;" 
+                   onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </a>
+            `;
+        } else {
+            authDropdown.innerHTML = `
+                <a href="#" onclick="openAuthModal('login'); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.05);" 
+                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </a>
+                <a href="#" onclick="openAuthModal('signup'); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none;" 
+                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            `;
+        }
+    });
+    
+    window.handleSignOut = async function(event) {
+        if (event) event.preventDefault();
+        try {
+            const authDropdown = document.getElementById('authDropdown');
+            if (authDropdown) {
+                authDropdown.style.opacity = '0';
+                authDropdown.style.visibility = 'hidden';
+                authDropdown.style.transform = 'translateY(-10px)';
+            }
+            await signOut(auth);
+        } catch (error) {
+            console.error('Sign out error:', error);
+        }
+    };
+    
+    window.firebaseAuth = auth;
+    </script>
+    
+    <script>
+    function openAuthModal(tab = 'login') {
+        const authModal = document.getElementById('authModal');
+        const authDropdown = document.getElementById('authDropdown');
+        if (authModal) {
+            authModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            switchAuthTab(tab);
+        }
+        if (authDropdown) {
+            authDropdown.style.opacity = '0';
+            authDropdown.style.visibility = 'hidden';
+            authDropdown.style.transform = 'translateY(-10px)';
+        }
+    }
+    
+    function switchAuthTab(tabName) {
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        
+        authTabs.forEach(tab => {
+            if (tab.getAttribute('data-tab') === tabName) {
+                tab.style.background = 'white';
+                tab.style.color = '#1a237e';
+                tab.style.borderBottom = '3px solid #1a237e';
+            } else {
+                tab.style.background = 'none';
+                tab.style.color = '#757575';
+                tab.style.borderBottom = 'none';
+            }
+        });
+        
+        if (loginTab && signupTab) {
+            if (tabName === 'login') {
+                loginTab.style.display = 'block';
+                signupTab.style.display = 'none';
+            } else {
+                loginTab.style.display = 'none';
+                signupTab.style.display = 'block';
+            }
+        }
+    }
+    </script>
+</head>
+<body class="contact-page">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header>
+        <div class="container">
+            <div class="header-wrapper">
+                <div class="logo-container">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">K</div>
+                        Kelsa Events
+                    </a>
+                </div>
+                <!-- HAMBURGER MENU IMPLEMENTATION -->
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <nav class="main-nav">
+                    <a href="index.html">Home</a>
+                    <a href="rentals.html">Rentals</a>
+                    <a href="event.html">Event Services</a>
+                    <a href="contact.html" class="active">Contact</a>
+                </nav>
+                
+                <div class="auth-hamburger" id="authHamburger" role="button" tabindex="0" aria-controls="authDropdown" aria-expanded="false" 
+                     style="position: relative; display: inline-block; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.3s ease; min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center;" 
+                     onmouseover="this.style.background='rgba(255,255,255,0.1)'" 
+                     onmouseout="this.style.background='none'">
+                    <i class="fas fa-user"></i>
+                    <div class="auth-dropdown" id="authDropdown" 
+                         style="position: absolute; top: 100%; right: 0; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); min-width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; z-index: 1001; border: 1px solid rgba(0,0,0,0.1); margin-top: 8px;">
+                        <!-- Content populated by shared-auth.js -->
+                    </div>
+                </div>
+
+                <div class="menu-overlay"></div>
+            </div>
+        </div>
+    </header>
+
+
+    <section class="hero">
+        <div class="hero-background">
+            <img src="assets/images/contact-hero.webp" alt="Contact Us" loading="eager" fetchpriority="high"
+                 onerror="this.onerror=null; this.src='https://source.unsplash.com/random/1600x900/?customer,service';">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team to plan your perfect event</p>
+            <div class="hero-buttons">
+                <a href="#contactForm" class="btn" style="background: #ffb300; color: #1a237e; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(255,179,0,0.3); text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#c68400'; this.style.color='#fff'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)';" onmouseout="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255,179,0,0.3)';">Send Message</a>
+                <a href="#about-us" class="btn btn-outline" style="background: transparent; border: 2px solid #ffb300; color: #fff; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; cursor: pointer; box-shadow: none; text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)';" onmouseout="this.style.background='transparent'; this.style.color='#fff'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">About Us</a>
+                <a href="tel:+2348025071778" class="btn btn-secondary" style="background: #ffb300; color: #1a237e; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; border: 2px solid #ffb300; cursor: pointer; box-shadow: 0 4px 12px rgba(255,179,0,0.3); text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#c68400'; this.style.color='#fff'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)'; this.style.borderColor='#c68400';" onmouseout="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255,179,0,0.3)'; this.style.borderColor='#ffb300';">Call Now</a>
+            </div>
+        </div>
+    </section>
+    
+    <main id="main-content">
+        <div class="container">
+            <section class="section">
+                <div class="section-title">Get In Touch</div>
+                <div class="section-subtitle">We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.</div>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Contact Information</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="fas fa-map-marker-alt" style="color: var(--accent); margin-right: 10px;"></i> Shop 2B, BEAUFORT COURT ESTATE, LUGBE, ABUJA</li>
+                            <li><i class="fas fa-phone" style="color: var(--accent); margin-right: 10px;"></i> +234 913 463 6775</li>
+                            <li><i class="fas fa-phone" style="color: var(--accent); margin-right: 10px;"></i> +234 802 507 1778</li>
+                            <li><i class="fas fa-envelope" style="color: var(--accent); margin-right: 10px;"></i>  kelsarentalsevent@gmail.com</li>
+                            <li><i class="fas fa-clock" style="color: var(--accent); margin-right: 10px;"></i> Monday-Sunday: 9am-5pm</li>
+                        </ul>
+                        
+                        <h3 class="mt-4">Follow Us</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/share/176hR3xknU/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://instagram.com/kelsarentals"><i class="fab fa-instagram"></i></a>
+                            <a href="https://twitter.com/kelsaevents"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Send Us a Message</h3>
+                        <form class="contact-form" id="contactForm" onsubmit="sendEmail(event)">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" id="name" name="name" class="form-control" required 
+                                       data-error-required="Please enter your name" minlength="2">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" id="email" name="email" class="form-control" required
+                                       data-error-required="Please enter your email address"
+                                       data-error-email="Please enter a valid email address">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" required
+                                       data-error-required="Please enter your phone number"
+                                       data-error-phone="Please enter a valid phone number"
+                                       placeholder="+234 123 456 7890">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eventType" class="form-label">Event Type</label>
+                                <select id="eventType" name="eventType" class="form-control" required
+                                        data-error-required="Please select an event type">
+                                    <option value="">Select an event type</option>
+                                    <option value="wedding">Wedding</option>
+                                    <option value="corporate">Corporate Event</option>
+                                    <option value="birthday">Birthday Party</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message" class="form-label">Your Message</label>
+                                <textarea id="message" name="message" class="form-control" required
+                                          data-error-required="Please enter your message" minlength="10"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn" id="submitBtn">Send Message</button>
+                        </form>
+                        
+                        <script>
+                        function sendEmail(event) {
+                            event.preventDefault();
+                            
+                            // Simple validation - check required fields
+                            const name = document.getElementById('name').value.trim();
+                            const email = document.getElementById('email').value.trim();
+                            const phone = document.getElementById('phone').value.trim();
+                            const eventType = document.getElementById('eventType').value;
+                            const message = document.getElementById('message').value.trim();
+                            
+                            if (!name || !email || !phone || !eventType || !message) {
+                                alert('Please fill in all required fields.');
+                                return;
+                            }
+                            
+                            const subject = encodeURIComponent('New Contact - ' + name);
+                            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nEvent Type: ${eventType}\n\nMessage:\n${message}`);
+                            
+                            // Try to open email client
+                            const mailtoLink = `mailto:kelsarentalsevent@gmail.com?subject=${subject}&body=${body}`;
+                            
+                            // Try mailto first
+                            window.location.href = mailtoLink;
+                            
+                            // Show fallback after 2 seconds if mailto didn't work
+                            setTimeout(() => {
+                                const emailContent = `To: kelsarentalsevent@gmail.com\nSubject: New Contact - ${name}\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nEvent Type: ${eventType}\n\nMessage:\n${message}`;
+                                
+                                if (confirm('Email client not opening? Click OK to copy the message and send manually.')) {
+                                    navigator.clipboard.writeText(emailContent).then(() => {
+                                        alert('Message copied! Paste it into your email and send to kelsarentalsevent@gmail.com');
+                                    }).catch(() => {
+                                        alert('Please copy this message and email it to kelsarentalsevent@gmail.com:\n\n' + emailContent);
+                                    });
+                                }
+                            }, 2000);
+                        }
+                        </script>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <div class="section-title">Our Location</div>
+                <div class="map-container" style="height: 400px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);">
+                    <div class="map-placeholder" style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary) 0%, #2a3990 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;">
+                        <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                        <h3>Shop 2B, BEAUFORT COURT ESTATE</h3>
+                        <p>LUGBE, ABUJA</p>
+                        <a href="https://goo.gl/maps/YourActualGoogleMapsLink" class="btn" style="margin-top: 1rem;" target="_blank" rel="noopener">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </a>
+                    </div>
+                </div>
+                <div class="address-details" style="margin-top: 1.5rem; text-align: center;">
+                    <p>We're located in the heart of LUGBE, ABUJA. Visit us today to discuss your event needs in person!</p>
+                    <p>
+                        <a href="tel:+2349134636775" class="btn" style="margin-right: 1rem;">
+                            <i class="fas fa-phone"></i> Call Us
+                        </a>
+                        <a href="tel:+2348025071778" class="btn" style="margin-right: 1rem;">
+                            <i class="fas fa-phone"></i> Call Us (Alt)
+                        </a>
+                        <a href="mailto:kelsarentalsevent@gmail.com" class="btn">
+                            <i class="fas fa-envelope"></i> Email Us
+                        </a>
+                    </p>
+                </div>
+            </section>
+            
+            <section id="about-us" class="section">
+                <div class="section-title">About Kelsa Events</div>
+                <div class="section-subtitle">Your trusted partner in creating memorable experiences</div>
+                
+                <div class="card" style="background: linear-gradient(135deg, var(--primary) 0%, #2a3990 100%); color: white; margin-bottom: 2rem;">
+                    <div style="text-align: center;">
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">Our Story</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.7;">Founded in 2020, Kelsa Events has grown from a small rental business to Abuja's premier event planning and equipment rental company. We believe every celebration deserves to be extraordinary, and we're passionate about turning your vision into reality.</p>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;">
+                        <div style="flex: 0 0 auto; text-align: center;">
+                            <img src="assets/images/kelsa_manager.webp" alt="Kelsa Events Manager" 
+                                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 4px solid var(--accent);">
+                        </div>
+                        <div style="flex: 1 1 300px;">
+                            <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Meet Our Team Leader</h3>
+                            <h4 style="color: var(--accent); margin-bottom: 1rem; font-weight: 600;">Mrs Kelechi Esther Akinwande</h4>
+                            <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 1rem;">With over 5 years of experience in event management and a passion for creating memorable experiences, Mrs Akinwande ensures every event receives personalized attention and professional execution.</p>
+                            <p style="font-style: italic; color: var(--primary); font-weight: 500;">"We don't just plan events, we create lasting memories that bring joy to families and communities across the country."</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-eye" style="font-size: 2.5rem; color: var(--accent);"></i>
+                        </div>
+                        <h3>Our Vision</h3>
+                        <p>To be Nigeria's leading event planning company, known for creativity, reliability, and exceptional service that exceeds client expectations.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-bullseye" style="font-size: 2.5rem; color: var(--accent);"></i>
+                        </div>
+                        <h3>Our Mission</h3>
+                        <p>To create unforgettable events through innovative planning, premium equipment, and personalized service that brings joy to every celebration.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-heart" style="font-size: 2.5rem; color: var(--accent);"></i>
+                        </div>
+                        <h3>Our Values</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Excellence in service delivery</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Integrity and transparency</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Customer satisfaction first</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Innovation and creativity</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Why Choose Kelsa Events?</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1rem;">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fas fa-award" style="margin-right: 8px; color: var(--accent);"></i>Proven Track Record</h4>
+                            <p>Over 500 successful events and countless satisfied clients across Abuja and beyond.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fas fa-users" style="margin-right: 8px; color: var(--accent);"></i>Expert Team</h4>
+                            <p>Professional event planners and coordinators with years of industry experience.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fas fa-tools" style="margin-right: 8px; color: var(--accent);"></i>Premium Equipment</h4>
+                            <p>High-quality, well-maintained rental equipment for all types of events.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fas fa-handshake" style="margin-right: 8px; color: var(--accent);"></i>Personal Touch</h4>
+                            <p>Every event is unique, and we provide personalized service tailored to your needs.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" style="background: var(--accent); color: var(--primary-dark); text-align: center;">
+                    <h3 style="margin-bottom: 1rem;">Our Commitment to You</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">At Kelsa Events, we don't just plan events — we create experiences. From the initial consultation to the final cleanup, we're with you every step of the way, ensuring your special day is everything you dreamed it would be.</p>
+                    <div style="display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;">
+                        <div><i class="fas fa-clock" style="margin-right: 8px;"></i><strong>On-Time Delivery</strong></div>
+                        <div><i class="fas fa-shield-alt" style="margin-right: 8px;"></i><strong>Quality Guarantee</strong></div>
+                        <div><i class="fas fa-phone" style="margin-right: 8px;"></i><strong>24/7 Support</strong></div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <div class="section-title">Frequently Asked Questions</div>
+                
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>How far in advance should I book your services?</h3>
+                    <p>We recommend booking our services at least 3-6 months in advance for large events like weddings, and 1-2 months for smaller events. However, we do accommodate last-minute bookings when possible.</p>
+                </div>
+                
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>Do you provide delivery and setup services?</h3>
+                    <p>Yes, we offer delivery, setup, and pickup services for all our rental items. Additional fees may apply based on location and complexity.</p>
+                </div>
+                
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>What is your cancellation policy?</h3>
+                    <p>Cancellations made 30+ days before the event receive a full refund minus a 10% administrative fee. Cancellations within 30 days are subject to our detailed policy, which will be provided in your contract.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Kelsa Events</h3>
+                    <p>Your premier partner for event planning and rental services since 2020.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/176hR3xknU/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/kelsarentals"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/kelsaevents"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="rentals.html">Rentals</a></li>
+                        <li><a href="event.html">Event Services</a></li>
+                        <li><a href="rentals.html#logistics-services">Logistics</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Shop 2B, BEAUFORT COURT ESTATE, LUGBE, ABUJA</li>
+                        <li><i class="fas fa-phone"></i> +234 913 463 6775</li>
+                        <li><i class="fas fa-phone"></i> +234 802 507 1778</li>
+                        <li><i class="fas fa-envelope"></i> kelsarentalsevent@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; <span id="currentYear">2025</span> Kelsa Events. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions" style="position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 1000;">
+        <a href="https://wa.me/2349134636775" class="whatsapp-btn" target="_blank" rel="noopener" aria-label="Contact us on WhatsApp" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transition: all 0.3s ease; background: #25D366;">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="tel:+2349134636775" class="phone-btn" aria-label="Call us" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transition: all 0.3s ease; background: #1a237e;">
+            <i class="fas fa-phone"></i>
+        </a>
+    </div>
+
+
+    <!-- Authentication Modal -->
+    <div id="authModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px);">
+        <div style="background-color: white; margin: 5% auto; padding: 0; border-radius: 16px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+            <span class="auth-close" style="position: absolute; top: 15px; right: 20px; color: #757575; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            
+            <div style="display: flex; border-bottom: 1px solid #eee; background: #f8f9fc; border-radius: 16px 16px 0 0;">
+                <button class="auth-tab active" data-tab="login" style="flex: 1; padding: 16px 12px; background: white; border: none; cursor: pointer; font-size: 1rem; font-weight: 600; color: #1a237e; border-bottom: 3px solid #1a237e;" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" data-tab="signup" style="flex: 1; padding: 16px 12px; background: none; border: none; cursor: pointer; font-size: 1rem; font-weight: 600; color: #757575;" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+            
+            <div id="authMessage" style="margin: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: 500; display: none;"></div>
+            
+            <div id="loginTab" style="display: block; padding: 32px 24px;">
+                <h2 style="color: #1a237e; margin-bottom: 24px; text-align: center; font-size: 1.5rem;">Welcome Back</h2>
+                <button onclick="handleGoogleSignIn()" style="width: 100%; padding: 12px 16px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px;">
+                    <i class="fab fa-google" style="color: #4285f4;"></i> Continue with Google
+                </button>
+                <div style="text-align: center; margin: 20px 0; position: relative; color: #757575;">
+                    <span style="background: white; padding: 0 12px;">or</span>
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #eee;"></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a237e;">Email Address</label>
+                    <input type="email" id="loginEmail" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box;">
+                </div>
+                <button onclick="handleEmailSignIn(event)" style="width: 100%; background: #ffb300; color: #1a237e; border: none; padding: 15px; border-radius: 30px; font-weight: 600; cursor: pointer;">Sign In</button>
+            </div>
+            
+            <div id="signupTab" style="display: none; padding: 32px 24px;">
+                <h2 style="color: #1a237e; margin-bottom: 24px; text-align: center; font-size: 1.5rem;">Create Account</h2>
+                <button onclick="handleGoogleSignIn()" style="width: 100%; padding: 12px 16px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px;">
+                    <i class="fab fa-google" style="color: #4285f4;"></i> Continue with Google
+                </button>
+                <div style="text-align: center; margin: 20px 0; position: relative; color: #757575;">
+                    <span style="background: white; padding: 0 12px;">or</span>
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #eee;"></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a237e;">Email Address</label>
+                    <input type="email" id="signupEmail" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box;">
+                </div>
+                <button onclick="handleEmailSignUp(event)" style="width: 100%; background: #ffb300; color: #1a237e; border: none; padding: 15px; border-radius: 30px; font-weight: 600; cursor: pointer;">Send Sign Up Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Footer Navigation -->
+    <nav class="mobile-footer-nav" style="display: none;"> 
+    <style>
+    @media (max-width: 768px) {
+        .mobile-footer-nav { display: flex !important; }
+    }
+    </style>
+        <a href="index.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="rentals.html">
+            <i class="fas fa-chair"></i>
+            <span>Rentals</span>
+        </a>
+        <a href="event.html">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Events</span>
+        </a>
+        <a href="contact.html" class="active">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </nav>
+
+
+    
+
+    <script src="js/main.js"></script>
+    <script src="js/image-optimizer.js"></script>
+    <script src="js/form-validator.js"></script>
+    <script src="js/form-handler.js"></script>
+    <script src="js/email-collector-simple.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Add animation to cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.transitionDelay = (index * 0.1) + 's';
+            
+            setTimeout(() => {
+                card.style.opacity = 1;
+                card.style.transform = 'translateY(0)';
+            }, 300);
+        });
+        
+        // Use embedded map instead of JavaScript API
+        const mapContainer = document.querySelector('.map-container');
+        if (mapContainer) {
+            // Create an embedded Google Maps iframe
+            const mapIframe = document.createElement('iframe');
+            mapIframe.style.width = '100%';
+            mapIframe.style.height = '100%';
+            mapIframe.style.border = 'none';
+            mapIframe.style.borderRadius = 'var(--radius)';
+            
+            // Set the map source - using OpenStreetMap as it doesn't require an API key
+            mapIframe.src = 'https://www.openstreetmap.org/export/embed.html?bbox=7.3786%2C9.0665%2C7.4186%2C9.0865&amp;layer=mapnik&amp;marker=9.0765%2C7.3986';
+            
+            // Clear the container and add the iframe
+            mapContainer.innerHTML = '';
+            mapContainer.appendChild(mapIframe);
+            
+            // Add attribution link below the map
+            const attribution = document.createElement('div');
+            attribution.style.fontSize = '0.8rem';
+            attribution.style.textAlign = 'right';
+            attribution.style.marginTop = '5px';
+            attribution.innerHTML = '<a href="https://www.openstreetmap.org/?mlat=9.0765&amp;mlon=7.3986#map=15/9.0765/7.3986" target="_blank" rel="noopener">View larger map</a>';
+            
+            // Add the attribution after the map container
+            mapContainer.parentNode.insertBefore(attribution, mapContainer.nextSibling);
+        }
+        
+        // Update the "Get Directions" link to use Google Maps directions
+        const directionsLink = document.querySelector('.map-container a[target="_blank"]');
+        if (directionsLink) {
+            directionsLink.href = 'https://www.google.com/maps/dir/?api=1&destination=Shop+28+BEAUFORT+COURT+ESTATE+LUGBE+ABUJA&destination_place_id=ChIJwUKKi5VXXhARFGnEGOgB-3s';
+        }
+    });
+
+    </script>
+</body>
+</html>

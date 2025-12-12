@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, minimum-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Explore our premium event rental equipment including sound systems, lighting, venues, decor, and furniture for your special occasion.">
+    <title>Kelsa Events - Premium Rentals</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mobile.css" media="(max-width: 768px)">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a237e">
+    
+    <style>
+    @media (min-width: 769px) {
+        .mobile-footer-nav { display: none !important; }
+    }
+    @media (max-width: 768px) {
+        .mobile-footer-nav { display: flex !important; }
+    }
+    </style>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5H6Q75N2P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T5H6Q75N2P');
+    </script>
+    
+    <!-- Firebase Authentication - Inline for Guaranteed Loading -->
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCCng5B1NsrAugglmy5au8b8tB2NAEp2lA",
+        authDomain: "kelsa-events.firebaseapp.com",
+        projectId: "kelsa-events",
+        storageBucket: "kelsa-events.firebasestorage.app",
+        messagingSenderId: "137881039928",
+        appId: "1:137881039928:web:701eb84377311f84c9e2cd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    window.handleGoogleSignIn = async function() {
+        try {
+            showAuthMessage('Signing in with Google...', 'loading');
+            const provider = new GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            await signInWithPopup(auth, provider);
+            showAuthMessage('Successfully signed in!', 'success');
+            setTimeout(() => closeAuthModal(), 1500);
+        } catch (error) {
+            console.error('Google sign in error:', error);
+            showAuthMessage(error.message || 'Sign in failed', 'error');
+        }
+    };
+    
+    window.handleEmailSignIn = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        if (!email) {
+            showAuthMessage('Please enter your email address', 'error');
+            return;
+        }
+        try {
+            showAuthMessage('Sending sign in link...', 'loading');
+            const actionCodeSettings = {
+                url: window.location.origin + window.location.pathname,
+                handleCodeInApp: true,
+            };
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            localStorage.setItem('emailForSignIn', email);
+            showAuthMessage('Sign in link sent! Check your email.', 'success');
+        } catch (error) {
+            console.error('Email sign in error:', error);
+            showAuthMessage(error.message || 'Sign in failed', 'error');
+        }
+    };
+    
+    window.handleEmailSignUp = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('signupEmail').value.trim();
+        if (!email) {
+            showAuthMessage('Please enter your email address', 'error');
+            return;
+        }
+        try {
+            showAuthMessage('Sending sign up link...', 'loading');
+            const actionCodeSettings = {
+                url: window.location.origin + window.location.pathname,
+                handleCodeInApp: true,
+            };
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            localStorage.setItem('emailForSignIn', email);
+            showAuthMessage('Sign up link sent! Check your email.', 'success');
+        } catch (error) {
+            console.error('Email sign up error:', error);
+            showAuthMessage(error.message || 'Sign up failed', 'error');
+        }
+    };
+    
+    window.showAuthMessage = function(message, type) {
+        const container = document.getElementById('authMessage');
+        if (!container) return;
+        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' :
+                    type === 'error' ? '<i class="fas fa-exclamation-circle"></i>' :
+                    '<i class="fas fa-spinner fa-spin"></i>';
+        container.innerHTML = `${icon} ${message}`;
+        container.style.display = 'block';
+        container.style.background = type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1';
+        container.style.color = type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460';
+        container.style.border = `1px solid ${type === 'success' ? '#c3e6cb' : type === 'error' ? '#f5c6cb' : '#bee5eb'}`;
+        if (type !== 'loading') {
+            setTimeout(() => { if (container) container.style.display = 'none'; }, 5000);
+        }
+    };
+    
+    function closeAuthModal() {
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const authHamburger = document.getElementById('authHamburger');
+        const authDropdown = document.getElementById('authDropdown');
+        
+        if (authHamburger && authDropdown) {
+            authHamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isVisible = authDropdown.style.opacity === '1';
+                if (isVisible) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                } else {
+                    authDropdown.style.opacity = '1';
+                    authDropdown.style.visibility = 'visible';
+                    authDropdown.style.transform = 'translateY(0)';
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!authHamburger.contains(e.target) && !authDropdown.contains(e.target)) {
+                    authDropdown.style.opacity = '0';
+                    authDropdown.style.visibility = 'hidden';
+                    authDropdown.style.transform = 'translateY(-10px)';
+                }
+            });
+        }
+    });
+    
+    onAuthStateChanged(auth, user => {
+        const authDropdown = document.getElementById('authDropdown');
+        if (!authDropdown) return;
+        
+        if (user) {
+            authDropdown.innerHTML = `
+                <div style="padding: 15px; border-bottom: 1px solid #eee; background: #f8f9fc;">
+                    <strong style="color: #1a237e;">${user.displayName || "User"}</strong><br>
+                    <small style="color: #757575;">${user.email}</small>
+                </div>
+                <a href="#" onclick="handleSignOut(event)"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #d32f2f; text-decoration: none;" 
+                   onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </a>
+            `;
+        } else {
+            authDropdown.innerHTML = `
+                <a href="#" onclick="openAuthModal('login'); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.05);" 
+                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </a>
+                <a href="#" onclick="openAuthModal('signup'); return false;"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: #333; text-decoration: none;" 
+                   onmouseover="this.style.background='#f8f9fc'" onmouseout="this.style.background='white'">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            `;
+        }
+    });
+    
+    window.handleSignOut = async function(event) {
+        if (event) event.preventDefault();
+        try {
+            const authDropdown = document.getElementById('authDropdown');
+            if (authDropdown) {
+                authDropdown.style.opacity = '0';
+                authDropdown.style.visibility = 'hidden';
+                authDropdown.style.transform = 'translateY(-10px)';
+            }
+            await signOut(auth);
+        } catch (error) {
+            console.error('Sign out error:', error);
+        }
+    };
+    
+    window.firebaseAuth = auth;
+    </script>
+    
+    <script>
+    function openAuthModal(tab = 'login') {
+        const authModal = document.getElementById('authModal');
+        const authDropdown = document.getElementById('authDropdown');
+        if (authModal) {
+            authModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            switchAuthTab(tab);
+        }
+        if (authDropdown) {
+            authDropdown.style.opacity = '0';
+            authDropdown.style.visibility = 'hidden';
+            authDropdown.style.transform = 'translateY(-10px)';
+        }
+    }
+    
+    function switchAuthTab(tabName) {
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        
+        authTabs.forEach(tab => {
+            if (tab.getAttribute('data-tab') === tabName) {
+                tab.style.background = 'white';
+                tab.style.color = '#1a237e';
+                tab.style.borderBottom = '3px solid #1a237e';
+            } else {
+                tab.style.background = 'none';
+                tab.style.color = '#757575';
+                tab.style.borderBottom = 'none';
+            }
+        });
+        
+        if (loginTab && signupTab) {
+            if (tabName === 'login') {
+                loginTab.style.display = 'block';
+                signupTab.style.display = 'none';
+            } else {
+                loginTab.style.display = 'none';
+                signupTab.style.display = 'block';
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header>
+        <div class="container">
+            <div class="header-wrapper">
+                <div class="logo-container">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">K</div>
+                        Kelsa Events
+                    </a>
+                </div>
+                <nav class="main-nav">
+                    <a href="index.html">Home</a>
+                    <a href="rentals.html" class="active">Rentals</a>
+                    <a href="event.html">Event Services</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+                
+                <div class="auth-hamburger" id="authHamburger" role="button" tabindex="0" aria-controls="authDropdown" aria-expanded="false" 
+                     style="position: relative; display: inline-block; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.3s ease; min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center;" 
+                     onmouseover="this.style.background='rgba(255,255,255,0.1)'" 
+                     onmouseout="this.style.background='none'">
+                    <i class="fas fa-user"></i>
+                    <div class="auth-dropdown" id="authDropdown" 
+                         style="position: absolute; top: 100%; right: 0; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); min-width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; z-index: 1001; border: 1px solid rgba(0,0,0,0.1); margin-top: 8px;">
+                        <!-- Content populated by shared-auth.js -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+
+    <section class="hero">
+        <div class="hero-background">
+            <img src="assets/images/rentals.webp" alt="Premium Event Rentals" loading="eager" fetchpriority="high"
+                 onerror="this.onerror=null; this.src='https://source.unsplash.com/random/1600x900/?event,rental';">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Premium Event Rentals</h1>
+            <p>Elevate your event with our high-quality rental equipment and decor</p>
+            <div class="hero-buttons">
+                <a href="#rental-categories" class="btn" style="background: #ffb300; color: #1a237e; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(255,179,0,0.3); text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#c68400'; this.style.color='#fff'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)';" onmouseout="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255,179,0,0.3)';">Explore Rentals</a>
+                <a href="#logistics-services" class="btn btn-outline" style="background: transparent; border: 2px solid #ffb300; color: #fff; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; transition: all 0.3s ease; cursor: pointer; box-shadow: none; text-align: center; min-height: 44px; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#ffb300'; this.style.color='#1a237e'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(255,179,0,0.4)';" onmouseout="this.style.background='transparent'; this.style.color='#fff'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">Logistics Services</a>
+            </div>
+        </div>
+    </section>
+    
+    <main id="main-content">
+        <div class="container">
+            <div class="section-title animate">
+                <h2>Our Rental Categories</h2>
+                <p>Everything you need to create the perfect event atmosphere</p>
+            </div>
+
+            <section id="rental-categories" class="cards-container">
+                <div class="card animate">
+                    <div class="card-img">
+                        <img src="assets/images/moon_chiavaari_chair.webp" alt="Furniture Rentals" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3>Furniture Rentals</h3>
+                        <p>Luxury Chiavari chairs, VIP seating, banquet tables, and elegant furniture for your event.</p>
+                        <a href="#furniture-rentals" class="btn">View Details</a>
+                    </div>
+                </div>
+
+                <div class="card animate">
+                    <div class="card-img">
+                        <img src="assets/images/venue_decoration.webp" alt="Venue & Decor" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3>Venue & Decor</h3>
+                        <p>Arabian canopies, linens, centerpieces, and decorative elements to transform your space.</p>
+                        <a href="#decor-rentals" class="btn">View Details</a>
+                    </div>
+                </div>
+
+                <div class="card animate">
+                    <div class="card-img">
+                        <img src="assets/images/wine_glass.webp" alt="Tableware & Catering" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3>Tableware & Catering Equipment</h3>
+                        <p>Fine china, glassware, cutlery, and traditional serving pieces for elegant dining.</p>
+                        <a href="#tableware-rentals" class="btn">View Details</a>
+                    </div>
+                </div>
+
+                <div class="card animate">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop" alt="AV Equipment" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3>Audio Visual & Equipment</h3>
+                        <p>Professional sound systems, lighting, projectors, and technical equipment for events.</p>
+                        <a href="#equipment-rentals" class="btn">View Details</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="furniture-rentals" class="mt-2 mb-2">
+                <div class="section-title">
+                    <h2>Furniture Rentals</h2>
+                </div>
+                <p style="padding-bottom: 2rem;">Elegant and comfortable seating and table options to create the perfect atmosphere for your event.</p>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/moon_chiavaari_chair.webp" alt="Luxury Chairs" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Luxury Chiavari & VIP Chairs</h3>
+                            <p>Premium seating options for elegant events and special occasions.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/circle_banquet_table" alt="Banquet Tables" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Round & Rectangular Banquet Tables</h3>
+                            <p>Various table sizes and shapes to accommodate your guest count.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/plastic_chairs.webp" alt="Outdoor Furniture" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Lush Carpet Grass & Plastic Chairs and Tables</h3>
+                            <p>Complete outdoor setup with carpet grass and plastic furniture.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/serpentine_table.webp" alt="Serpentine Tables" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Serpentine Tables</h3>
+                            <p>Curved S-shaped tables perfect for buffet setups and creative event layouts.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="decor-rentals" class="mt-2 mb-2">
+                <div class="section-title">
+                    <h2>Venue & Decor Rentals</h2>
+                </div>
+                <p style="padding-bottom: 2rem;">Transform your event space with our elegant decorative elements and venue enhancements.</p>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://i.pinimg.com/736x/f4/4e/44/f44e44427989f162b235c22c1dc441ea.jpg" alt="Arabian Canopies" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Elegant Arabian Canopies</h3>
+                            <p>Stunning overhead coverage for outdoor and indoor events.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://i.pinimg.com/736x/a7/50/0c/a7500c1ca8f2348a55bb6f60894c8868.jpg" alt="Linens & Covers" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Chair Covers, Fine Linens & Napkins</h3>
+                            <p>Complete table dressing with chair covers, linens, and napkins.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=400&fit=crop" alt="Centerpieces" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Centerpieces & Fresh Floral Arrangements</h3>
+                            <p>Beautiful centerpieces and fresh floral arrangements for your tables.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tableware-rentals" class="mt-2 mb-2">
+                <div class="section-title">
+                    <h2>Tableware & Catering Equipment</h2>
+                </div>
+                <p style="padding-bottom: 2rem;">Complete your dining experience with our premium tableware and serving equipment.</p>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1522413452208-996ff3f3e740?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cGxhdGVzJTIwd2VkZGluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500" alt="Breakable Plates" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Breakable Plates</h3>
+                            <p>Quality breakable plates for elegant dining service.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/wine_glass.webp" alt="Wine Glasses" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Wine Glasses</h3>
+                            <p>Premium wine glasses for elegant beverage service.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/champagne_glass.webp" alt="Champagne Glasses" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Champagne Glasses</h3>
+                            <p>Elegant champagne flutes for toasts and celebrations.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/Pink_table_cloth.webp" alt="Table Covers & Linens" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Table Covers & Linens</h3>
+                            <p>Premium table covers, runners, and linens in various colors to match your event theme.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="assets/images/water_glass.webp" alt="Water Glasses" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Water Glasses</h3>
+                            <p>Quality water glasses for beverage service at your event.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="equipment-rentals" class="mt-2 mb-2">
+                <div class="section-title">
+                    <h2>Audio Visual & Equipment Rentals</h2>
+                </div>
+                <p style="padding-bottom: 2rem;">Professional AV equipment and technical solutions to enhance your event experience.</p>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://media.istockphoto.com/id/487205823/photo/audio-speakers-isolated.webp?a=1&b=1&s=612x612&w=0&k=20&c=r5x4DxxJwHp1Y5lcP2FPm6E_YaXKGQa_GFRZBPwhA_Y=" alt="Sound Systems" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Sound Systems</h3>
+                            <p>Professional audio equipment including speakers, microphones, and mixing consoles for crystal clear sound.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1597333936102-0d9f997042ec?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHdlZGRpbmclMjBwcm9qZWN0aW9ufGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500" alt="Projection Equipment" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>Projection & Screens</h3>
+                            <p>High-definition projectors and screens for presentations, movies, and visual displays.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-badge">Popular</div>
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=400&fit=crop" alt="LED Lighting" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>LED Lighting & Effects</h3>
+                            <p>Dynamic LED lighting, stage lights, and special effects to create the perfect ambiance.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="logistics-services" class="section">
+                <div class="section-title">
+                    <h2>Kelsa Logistics Services</h2>
+                    <p>Making movement easy with reliable, affordable delivery solutions</p>
+                </div>
+                
+                <div class="card" style="background: linear-gradient(135deg, var(--primary) 0%, #2a3990 100%); color: white; margin-bottom: 2rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; right: 0; width: 40%; height: 100%; opacity: 0.2;">
+                        <img src="assets/images/kelsa_van.webp" alt="Kelsa Van" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="text-align: center; position: relative; z-index: 2;">
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">Kelsa T and T Enterprise</h3>
+                        <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Your trusted partner for reliable, affordable, and customer-focused logistics solutions. We make movement easy for rental items, personal goods, and business deliveries.</p>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <i class="fas fa-truck" style="font-size: 2rem; color: var(--accent); margin-bottom: 0.5rem;"></i>
+                                <p><strong>Well-Maintained Vans</strong></p>
+                            </div>
+                            <div style="text-align: center;">
+                                <i class="fas fa-users" style="font-size: 2rem; color: var(--accent); margin-bottom: 0.5rem;"></i>
+                                <p><strong>Trained Team</strong></p>
+                            </div>
+                            <div style="text-align: center;">
+                                <i class="fas fa-clock" style="font-size: 2rem; color: var(--accent); margin-bottom: 0.5rem;"></i>
+                                <p><strong>Punctual Delivery</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-calendar-alt" style="font-size: 2.5rem; color: var(--accent);"></i>
+                        </div>
+                        <h3>Event Logistics</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Delivery & pickup of chairs, tables, canopy</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Setup and breakdown services</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Same-day and scheduled deliveries</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-home" style="font-size: 2.5rem; color: var(--accent);"></i>
+                        </div>
+                        <h3>Personal Item Movement</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Relocations and small moves</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Furniture and appliance transport</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Safe handling of fragile items</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-briefcase" style="font-size: 2.5rem; color: var(--accent);"></i>
+                        </div>
+                        <h3>Business Delivery</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Product & package transport for SMEs</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Regular delivery routes</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Inventory and stock transfers</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-plane" style="font-size: 2.5rem; color: var(--accent);"></i>
+                        </div>
+                        <h3>Airport Services</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Airport pickup and drop-off</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Luggage transfer services</li>
+                            <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> 24/7 availability for flights</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card" style="background: var(--accent); color: var(--primary-dark); text-align: center; margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Our Professional Values</h3>
+                    <div style="display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                        <div><i class="fas fa-heart" style="margin-right: 8px;"></i><strong>Care</strong></div>
+                        <div><i class="fas fa-clock" style="margin-right: 8px;"></i><strong>Punctuality</strong></div>
+                        <div><i class="fas fa-star" style="margin-right: 8px;"></i><strong>Professionalism</strong></div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 10px; margin-top: 1rem;">
+                        <h4 style="margin-bottom: 1rem;">Need a van for your next delivery?</h4>
+                        <p style="font-size: 1.1rem; margin-bottom: 1rem;"><strong>Contact us today — we move it fast, safe, and right on time.</strong></p>
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <a href="tel:+2349134636775" class="btn" style="background: var(--primary); color: white;">
+                                <i class="fas fa-phone"></i> Call Now
+                            </a>
+                            <a href="https://wa.me/2349134636775" class="btn" style="background: #25D366; color: white;" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                        <p style="margin-top: 1rem; font-weight: 600;"><i class="fas fa-calendar-check" style="margin-right: 8px;"></i>Available 7 days a week</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Our Clients Say</h2>
+            </div>
+            <div class="testimonial">
+                <p>"Kelsa Events provided exceptional rental equipment for our wedding. Everything was delivered on time and in perfect condition. Their team was professional and helpful throughout the entire process."</p>
+                <div class="testimonial-author">- Chioma & Wilson, Wedding Clients</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose Us</h2>
+            </div>
+            <div class="features-container">
+                <div class="feature">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Quality Guaranteed</h3>
+                    <p>All our rental items are regularly maintained and inspected for quality.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-truck"></i>
+                    <h3>Delivery & Setup</h3>
+                    <p>We offer delivery, setup, and pickup services for your convenience.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-star"></i>
+                    <h3>Premium Selection</h3>
+                    <p>Choose from our wide range of high-quality rental items.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-headset"></i>
+                    <h3>24/7 Support</h3>
+                    <p>Our team is always available to assist with any questions or concerns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Kelsa Events</h3>
+                    <p>Your premier partner for event planning and rental services since 2020.</p>
+                    <div class="social-links mt-2">
+                        <a href="https://www.facebook.com/share/176hR3xknU/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/kelsarentals"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/kelsaevents"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="rentals.html">Rentals</a></li>
+                        <li><a href="event.html">Event Services</a></li>
+                        <li><a href="rentals.html#logistics-services">Logistics</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Shop 2B, BEAUFORT COURT ESTATE, LUGBE, ABUJA</li>
+                        <li><i class="fas fa-phone"></i> +234 913 463 6775</li>
+                        <li><i class="fas fa-phone"></i> +234 802 507 1778</li>
+                        <li><i class="fas fa-envelope"></i> kelsarentalsevent@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; <span id="currentYear">2025</span> Kelsa Events. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions" style="position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 1000;">
+        <a href="https://wa.me/2349134636775" class="whatsapp-btn" target="_blank" rel="noopener" aria-label="Contact us on WhatsApp" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transition: all 0.3s ease; background: #25D366;">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="tel:+2349134636775" class="phone-btn" aria-label="Call us" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transition: all 0.3s ease; background: #1a237e;">
+            <i class="fas fa-phone"></i>
+        </a>
+    </div>
+
+
+    <!-- Mobile Footer Navigation -->
+    <nav class="mobile-footer-nav">
+        <a href="index.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="rentals.html" class="active">
+            <i class="fas fa-chair"></i>
+            <span>Rentals</span>
+        </a>
+        <a href="event.html">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Events</span>
+        </a>
+        <a href="contact.html">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </nav>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px);">
+        <div style="background-color: white; margin: 5% auto; padding: 0; border-radius: 16px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+            <span class="auth-close" style="position: absolute; top: 15px; right: 20px; color: #757575; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            
+            <div style="display: flex; border-bottom: 1px solid #eee; background: #f8f9fc; border-radius: 16px 16px 0 0;">
+                <button class="auth-tab active" data-tab="login" style="flex: 1; padding: 16px 12px; background: white; border: none; cursor: pointer; font-size: 1rem; font-weight: 600; color: #1a237e; border-bottom: 3px solid #1a237e;" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" data-tab="signup" style="flex: 1; padding: 16px 12px; background: none; border: none; cursor: pointer; font-size: 1rem; font-weight: 600; color: #757575;" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+            
+            <div id="authMessage" style="margin: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: 500; display: none;"></div>
+            
+            <div id="loginTab" style="display: block; padding: 32px 24px;">
+                <h2 style="color: #1a237e; margin-bottom: 24px; text-align: center; font-size: 1.5rem;">Welcome Back</h2>
+                <button onclick="handleGoogleSignIn()" style="width: 100%; padding: 12px 16px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px;">
+                    <i class="fab fa-google" style="color: #4285f4;"></i> Continue with Google
+                </button>
+                <div style="text-align: center; margin: 20px 0; position: relative; color: #757575;">
+                    <span style="background: white; padding: 0 12px;">or</span>
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #eee;"></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a237e;">Email Address</label>
+                    <input type="email" id="loginEmail" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box;">
+                </div>
+                <button onclick="handleEmailSignIn(event)" style="width: 100%; background: #ffb300; color: #1a237e; border: none; padding: 15px; border-radius: 30px; font-weight: 600; cursor: pointer;">Sign In</button>
+            </div>
+            
+            <div id="signupTab" style="display: none; padding: 32px 24px;">
+                <h2 style="color: #1a237e; margin-bottom: 24px; text-align: center; font-size: 1.5rem;">Create Account</h2>
+                <button onclick="handleGoogleSignIn()" style="width: 100%; padding: 12px 16px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px;">
+                    <i class="fab fa-google" style="color: #4285f4;"></i> Continue with Google
+                </button>
+                <div style="text-align: center; margin: 20px 0; position: relative; color: #757575;">
+                    <span style="background: white; padding: 0 12px;">or</span>
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #eee;"></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a237e;">Email Address</label>
+                    <input type="email" id="signupEmail" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box;">
+                </div>
+                <button onclick="handleEmailSignUp(event)" style="width: 100%; background: #ffb300; color: #1a237e; border: none; padding: 15px; border-radius: 30px; font-weight: 600; cursor: pointer;">Send Sign Up Link</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/main.js"></script>
+    <script src="js/image-optimizer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation on scroll
+            const animateElements = document.querySelectorAll('.animate');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            animateElements.forEach(element => {
+                element.style.opacity = 0;
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(element);
+            });
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Handle image loading
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.classList.add('loading');
+                img.addEventListener('load', function() {
+                    this.classList.remove('loading');
+                });
+                
+                // Add lazy loading
+                img.loading = 'lazy';
+            });
+        });
+    </script>
+</body>
+</html>
